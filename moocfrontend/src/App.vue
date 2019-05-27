@@ -1,7 +1,30 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <div class="f-header">
+      <div class="f-header-box clearfix">
+        <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
+        <nav class="header-nav">
+          <a href="/yourmooc/" class="header-nav-item">首 页</a>
+          <a href="/yourmooc/course/list" class="header-nav-item">分类</a>
+          <a href="/yourmooc/user/course" class="header-nav-item">我的</a>
+        </nav>
+      </div>
+    </div>
     <router-view/>
+    <div class="f-footer">
+      <div class="f-footer-box clearfix">
+        <div class="footer-link">
+          <a href="javascript:void(0)" target="_blank" title="企业合作">企业合作</a>
+          <a href="javascript:void(0)" target="_blank" title="联系我们">联系我们</a>
+          <a href="javascript:void(0)" target="_blank" title="常见问题">常见问题</a>
+          <a href="javascript:void(0)" target="_blank" title="意见反馈">意见反馈</a>
+          <a href="javascript:void(0)" target="_blank" title="友情链接">友情链接</a>
+        </div>
+        <div class="footer-copyright">
+          <span>©&nbsp;2018&nbsp; 备案 </span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,12 +35,5 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import url(../static/css/reset.css)
 </style>
