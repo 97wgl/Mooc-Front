@@ -51,12 +51,13 @@ export default {
         username: this.login.username,
         password: this.login.password
       }
-      console.log('postData', postData)
-      // this.$http({
-      //   method: 'post',
-      //   url: type == 'teacher' ? this.baseUrl + 'teacher/login' : this.baseUrl + 'admin/login',
-      //   data: this.transformRequest(postData)
-      // })
+      this.$http({
+        method: 'post',
+        url: type == 'teacher' ? this.baseUrl + 'teacher/login' : this.baseUrl + 'admin/login',
+        data: this.transformRequest(postData)
+      }).then(res => {
+        console.log('res', res)
+      })
       
     },
     registSubmit() {
