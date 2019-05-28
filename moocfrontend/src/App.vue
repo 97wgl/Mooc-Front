@@ -8,6 +8,7 @@
           <span class="header-nav-item" @click="$router.push('course_detail')">分类</span>
           <span class="header-nav-item" @click="$router.push('login')">我的</span>
           <span class="header-nav-item" @click="$router.push('login')">登录</span>
+          <span class="header-nav-item" @click="$router.push('teacher_login')">我是老师</span>
         </nav>
       </div>
     </div>

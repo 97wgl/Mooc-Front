@@ -30,6 +30,11 @@ export default new Router({
       path: '/sections_detail',
       name: 'sections_detail',
       component: (resolve) => require(['../views/sectionsDetail.vue'], resolve)
+    },
+    {
+      path: '/teacher_login',
+      name: 'teacher_login',
+      component: (resolve) => require(['../views/teacher/teacherLogin.vue'], resolve)
     }
   ]
 })
