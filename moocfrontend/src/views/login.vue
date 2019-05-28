@@ -61,7 +61,7 @@ export default {
       
       this.$http({
         method: 'post',
-        url: this.baseUrl + 'admin/login',
+        url: this.baseUrl + 'user/login',
         data: this.transformRequest(postData)
       }).then(res => {
         console.log(this.transformRequest(postData));

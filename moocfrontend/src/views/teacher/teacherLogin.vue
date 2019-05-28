@@ -11,16 +11,14 @@
              class="login-form")
           FormItem(label="角色")
             RadioGroup(v-model="login.type")
-              Radio(label="user") 用户
-              Radio(label="admin") 健身房管理员
-              Radio(label="coach") 教练
+              Radio(label="teacher") 教师
+              Radio(label="admin") 管理员
           FormItem(label="账号", prop="username")
             Input(v-model="login.username", placeholder="请输入账号", ruquired, name="username")
           FormItem(label="密码", prop="password")
             Input(v-model="login.password", type="password", placeholder="请输入密码", @keyup.enter.native="submit()", name="userpwd")
           FormItem
-            Button(type="success", @click="submitLogin()", style="margin-right: 20px;") 登录
-            Button(type="success", @click="registSubmit()") 注册
+            Button(type="success", @click="submitLogin(login.type)", style="margin-right: 20px;") 登录
 </template>
 
 <script>
@@ -29,7 +27,7 @@ export default {
   data() {
     return {
       login: {
-        type: 'user',
+        type: 'teacher',
         username: '',
         password: ''
       },
@@ -48,7 +46,18 @@ export default {
   methods: {
     loginSuccess(token, username, userpwd, role) {
     },
-    submitLogin() {
+    submitLogin(type) {
+      let postData = {
+        username: this.login.username,
+        password: this.login.password
+      }
+      console.log('postData', postData)
+      // this.$http({
+      //   method: 'post',
+      //   url: type == 'teacher' ? this.baseUrl + 'teacher/login' : this.baseUrl + 'admin/login',
+      //   data: this.transformRequest(postData)
+      // })
+      
     },
     registSubmit() {
       this.$router.push('/register');
