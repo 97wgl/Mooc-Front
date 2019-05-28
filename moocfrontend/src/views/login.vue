@@ -24,6 +24,9 @@
         </form>
       </div>
     </div>
+    <div class="toast" v-if="showModal">
+      <span>{{message}}</span>
+    </div>
   </div>
 </template>
 <script>
@@ -34,6 +37,8 @@ export default {
       myErrCode: -1,
       username: '',
       password: '',
+      message: '',
+      showModal: false,
     }
   },
   methods: {
@@ -61,11 +66,25 @@ export default {
       
       this.$http({
         method: 'post',
-        url: this.baseUrl + 'admin/login',
+        url: this.baseUrl + 'user/login',
         data: this.transformRequest(postData)
       }).then(res => {
-        console.log(this.transformRequest(postData));
         console.log('res', res)
+        if(res.data.code == 0) {
+          this.message = res.data.msg
+          this.showModal = true
+          setTimeout(function () {
+            //  this.$router.push('/index')
+             this.showModal = false
+          }, 1500)
+         
+        }else {
+          this.message = res.data.msg
+          this.showModal = true
+        }
+        // setTimeout(function () {
+        //   this.showModal = false
+        // }, 1500)
         // if(res.code == 0) {
         //   this.$router.push('index')
         // }else if(res.code == 1) {
@@ -105,7 +124,20 @@ export default {
 }
 </script>
 <style>
-
+  .toast span{
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    background: white;
+    text-align: center;
+    border-radius: 4px;
+  }
 </style>
 
 
