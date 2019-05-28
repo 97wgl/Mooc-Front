@@ -4,8 +4,8 @@
       <div class="f-header-box clearfix">
         <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
         <nav class="header-nav">
-          <span class="header-nav-item" @click="$router.push('index')">首页</span>
-          <span class="header-nav-item" @click="$router.push('course_detail')">分类</span>
+          <span class="header-nav-item" @click="$router.push('/')">首页</span>
+          <span class="header-nav-item" @click="$router.push('list')">分类</span>
           <span class="header-nav-item" @click="$router.push('login')">我的</span>
           <span class="header-nav-item" @click="$router.push('login')">登录</span>
         </nav>
@@ -31,7 +31,10 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods: {
+
+  }
 }
 </script>
 
