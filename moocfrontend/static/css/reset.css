@@ -140,6 +140,8 @@ a:focus {
   text-align: center;
   color: #FFF;
   border-radius: 4px;
+  height: 34px;
+  border: 0
 }
 
 .btn:hover {
@@ -785,7 +787,7 @@ a:focus {
 
 .course-menu {
   width: 100%;
-  padding: 30px 0px;
+  padding-top: 30px;
 }
 
 .course-menu .menu-item {

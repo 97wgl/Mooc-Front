@@ -4,9 +4,10 @@
       <div class="f-header-box clearfix">
         <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
         <nav class="header-nav">
-          <a href="/yourmooc/" class="header-nav-item">首 页</a>
-          <a href="/yourmooc/course/list" class="header-nav-item">分类</a>
-          <a href="/yourmooc/user/course" class="header-nav-item">我的</a>
+          <span class="header-nav-item" @click="$router.push('index')">首页</span>
+          <span class="header-nav-item" @click="$router.push('course_detail')">分类</span>
+          <span class="header-nav-item" @click="$router.push('login')">我的</span>
+          <span class="header-nav-item" @click="$router.push('login')">登录</span>
         </nav>
       </div>
     </div>
