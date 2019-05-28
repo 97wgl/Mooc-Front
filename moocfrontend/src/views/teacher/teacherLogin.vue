@@ -43,77 +43,12 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapState({
-      user: 'user',
-    }),
-  },
   created() { // 在登录页的时候，将存在本地的Authorization清除
-    localStorage.removeItem('Authorization');
-    this.$store.commit('setUser', {
-      username: null,
-      type: null
-    });
   },
   methods: {
     loginSuccess(token, username, userpwd, role) {
-      console.log('token', token)
-      let postData = {
-        token: token,
-        username: username,
-        type: role,
-        userpwd: userpwd
-      }
-      localStorage.setItem('Authorization', JSON.stringify(postData));
-      this.$store.commit('setUser', {
-        username: username,
-        type: role
-      });
-      window.$axios.defaults.headers.common['Authorization'] = localStorage.getItem('Authorization');
-      if(this.user.type == 'admin') {
-        let _url = this.$route.query.redirect ? this.$route.query.redirect : '/'
-        this.$router.push('/course_list')
-      }else if(this.user.type == 'user'){
-        this.$router.push('/gym_detail')
-      }else {
-        this.$router.push('/coach_can_arrange')
-      }
-      this.$refs['loginForm'].resetFields();
     },
     submitLogin() {
-      let postData = {
-        username: this.login.username,
-        userpwd: this.login.password,
-        type: this.login.type
-      }
-      this.$http({
-        method:'post',
-        url:this.$util.baseUrl+'users/userLogin',
-        data:{
-          username:this.login.username.trim(),
-          userpwd:this.login.password.trim(),
-          type: this.login.type.trim()
-        }
-      }).then(res => {
-        console.log('res', res)
-        if(res.data.code == '800000') {
-          // localStorage.setItem('Authorization', JSON.stringify(res.data.data)); // 登录成功即将返回值保存
-          // this.$store.commit('setUser', {
-          //   username: this.login.username,
-          //   role: this.login.password
-          // });
-          // let _url = this.$route.query.redirect ? this.$route.query.redirect : '/'
-          // this.$router.push(_url)
-          // this.$refs['loginForm'].resetFields();
-          // console.log('res.data.token', res.data.token)
-          this.loginSuccess(res.data.token, res.data.data.username, res.data.data.userpwd,res.data.data.type);
-        }else { // 登录失败
-          this.$refs['loginForm'].resetFields();
-          this.$Message.error(res.data.mess)
-        }
-      }).then((err) => {
-        console.log(err)
-      })
     },
     registSubmit() {
       this.$router.push('/register');
