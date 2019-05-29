@@ -27,7 +27,8 @@
   </div>
 </template>
 <script>
-import $ from 'jquery';
+import $ from 'jquery'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -35,6 +36,11 @@ export default {
       username: '',
       password: '',
     }
+  },
+  computed: {
+    ...mapState({
+      user: 'user',
+    }),
   },
   methods: {
     doSubmit() {
@@ -64,26 +70,18 @@ export default {
         url: this.baseUrl + 'user/login',
         data: this.transformRequest(postData)
       }).then(res => {
-        console.log(this.transformRequest(postData));
-        console.log('res', res)
-        // if(res.code == 0) {
-        //   this.$router.push('index')
-        // }else if(res.code == 1) {
-        //   $errorMsg.fadeIn().html("验证码错误");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }else if(res.errcode == 2) {
-        //   $errorMsg.fadeIn().html("用户不存在");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }else if(res.errcode == 3) {
-        //   $errorMsg.fadeIn().html("密码错误");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }
+        if(res.data.code == 0) {
+          let data = res.data.data
+          this.$Message.success(res.data.msg)
+          sessionStorage.setItem('Authorization', JSON.stringify(data));
+          let postData = {
+            'username': data.userInfo,
+            'type': data.type
+          }
+          this.$store.commit('setUser', postData);
+          console.log('user 学生', this.user)
+          this.$router.push('/index')
+        }
       })
     },
     handleInput(field) {

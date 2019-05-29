@@ -10,7 +10,7 @@
             <input @focus="handleInput('email');" maxlength="20" v-model="email" type="email" class="input-text"
                   placeholder="请输入邮箱">
           </li>
-          <li>
+          <li style="padding-right: 0px">
             <label>验证码</label>
             <input @focus="handleInput('code');" maxlength="20" v-model="validCode" type="text" class="input-text"
                   placeholder="请输入验证码">

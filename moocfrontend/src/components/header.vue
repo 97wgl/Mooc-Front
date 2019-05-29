@@ -1,121 +1,45 @@
 <template lang="jade">
   div.layout
     div(style="background-color: #2d8cf0")
-      Menu(mode="horizontal", theme="primary",  :active-name="activePath", @on-select="menuRoute", v-if="user.type == 'admin'")
-        .layout-nav(v-if="user.username")
+      Menu(mode="horizontal", theme="primary",  :active-name="activePath", @on-select="menuRoute")
+        .layout-nav
           //- img.keep-logo(src="./img/keep-logo.png")
           //- Menu-item(name="gym_list")
           //-   Icon(type="home")
           //-   |健身房管理
-          Menu-item(name="course_list")
-            Icon(type="home")
-            |课程管理
-          Submenu(name="coach")
-            template(slot="title")
-              Icon(type="android-settings")
-              | 排课系统
-            MenuGroup(title="排课系统")
-              MenuItem(name="arrange_schedule") 排课
-          Menu-item(name="coach_list")
-            Icon(type="person-stalker")
-            |教练管理
-          Menu-item(name="vip_list")
-            Icon(type="home")
-            |会员管理
-          Menu-item(name="equipment_reservation_management")
-            Icon(type="home")
-            |设备预约管理
-          Menu-item(name="equipment_management_list")
-            Icon(type="home")
-            |器材管理
-          Menu-item(name="equipment_use")
-            Icon(type="home")
-            |器材使用详情
-          Menu-item(name="my_plan_list")
-            Icon(type="home")
-            |我的计划
-          Dropdown(class="nav-right-menu", placement="bottom-end", @on-click="logout")
-            a(href="javascript:void(0)", style="color:#fff;")
-              | {{ user.username }}
-              Icon(type="person")
-            DropdownMenu(slot="list")
-              DropdownItem(name="logout") 注销
-        .keep-title(v-else) 健身房预约管理系统
-      Menu(mode="horizontal", theme="primary",  :active-name="activePath", @on-select="menuRoute", v-if="user.type == 'user'")
-        .layout-nav(v-if="user.username")
-          //- img.keep-logo(src="./img/keep-logo.png")
-          Submenu(name="gym_detail")
-            template(slot="title")
-              Icon(type="android-settings")
-              | 查看健身房
-            MenuGroup(title="健身房评价")
-              MenuItem(name="gym_detail") 查看健身房
-              MenuItem(name="gym_comments") 健身房评价
-          Menu-item(name="course_list")
-            Icon(type="home")
-            |查看课程
-          Menu-item(name="arrange_schedule") 
-            Icon(type="home")
-            |预约课程
-          Menu-item(name="equipment_reservation_management")
-            Icon(type="home")
-            |预约器材
-          Menu-item(name="coach_list")
-            Icon(type="person-stalker")
-            |查看教练
-          Menu-item(name="my_info")
+          div
+            Menu-item(name="course_list")
               Icon(type="home")
-              |个人信息
-          Menu-item(name="my_plan_list")
-            Icon(type="home")
-            |我的计划
+              |课程管理
+            Menu-item(name="coach_list")
+              Icon(type="person-stalker")
+              |留言管理
+            Menu-item(name="vip_list")
+              Icon(type="home")
+              |评价管理
+            Menu-item(name="equipment_reservation_management")
+              Icon(type="home")
+              |个人信息管理
           Dropdown(class="nav-right-menu", placement="bottom-end", @on-click="logout")
             a(href="javascript:void(0)", style="color:#fff;")
-              | {{ user.username }}
+              | {{ user.userInfo }}
               Icon(type="person")
             DropdownMenu(slot="list")
               DropdownItem(name="logout") 注销
-        .keep-title(v-else) 健身房预约管理系统
-      Menu(mode="horizontal", theme="primary",  :active-name="activePath", @on-select="menuRoute", v-if="user.type == 'coach'")
-        .layout-nav(v-if="user.username")
-          //- img.keep-logo(src="./img/keep-logo.png")
-          Menu-item(name="coach_can_arrange") 
-            Icon(type="home")
-            |提交可排课时间
-          Menu-item(name="coach_plan")
-            Icon(type="person-stalker")
-            |我的排课
-          Menu-item(name="my_info")
-            Icon(type="home")
-            |个人信息
-          Dropdown(class="nav-right-menu", placement="bottom-end", @on-click="logout")
-            a(href="javascript:void(0)", style="color:#fff;")
-              | {{ user.username }}
-              Icon(type="person")
-            DropdownMenu(slot="list")
-              DropdownItem(name="logout") 注销
-        .keep-title(v-else) 健身房预约管理系统
-      Menu(mode="horizontal", theme="primary",  :active-name="activePath", @on-select="menuRoute", v-if="!user.type")
-        .keep-title 健身房预约管理系统
-    .layout-content
-      router-view
+    //-   Menu(mode="horizontal", theme="primary",  :active-name="activePath", @on-select="menuRoute", v-if="user.type == 'user'")
+    //-     .layout-nav(v-if="user.username")
+    //-      
 </template>
 
 <script>
-import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
-      isAdmin: true,
-      postDatas: {
-
-      }
+      user: null
     };
   },
   computed: {
-    ...mapState({
-      user: 'user',
-    }),
     activePath: function(){
       if (this.$route.matched.length > 1) {
          // 二级路由
@@ -129,31 +53,32 @@ export default {
   },
   created() { // 每次刷新页面，执行以下代码
     // 检验进入任何页面之前是否有登录，如果登录了，那么存入Authorization
-     if (localStorage.getItem('Authorization')) { // 如果登陆了
-      let postData = localStorage.getItem('Authorization'); // 拿到登录返回的结果，
-      this.postDatas = JSON.parse(postData)
+     if (sessionStorage.getItem('Authorization')) { // 如果登陆了
+      let postData = sessionStorage.getItem('Authorization'); // 拿到登录返回的结果，
+      this.user = JSON.parse(postData)
+      console.log('this.userInfo头部', this.user)
       // 根据权限的不同展示不同
 
-      this.$http({
-        method:'post',
-        url:this.$util.baseUrl+'users/userLogin',
-        data:{
-          username:this.postDatas.username,
-          userpwd:this.postDatas.userpwd,
-          type: this.postDatas.type
-        }
-      }).then(res => {
-        if(res.data.code == '800000') {
-          localStorage.setItem('Authorization', JSON.stringify(res.data.data)); // 登录成功即将返回值保存
-          this.$store.commit('setUser', {
-            username: this.postDatas.username,
-            type: this.postDatas.type
-          });
-        }else { // 登录失败
-        }
-      }).then((err) => {
-        console.log(err)
-      })
+      // this.$http({
+      //   method:'post',
+      //   url:this.$util.baseUrl+'users/userLogin',
+      //   data:{
+      //     username:this.postDatas.username,
+      //     userpwd:this.postDatas.userpwd,
+      //     type: this.postDatas.type
+      //   }
+      // }).then(res => {
+      //   if(res.data.code == '800000') {
+      //     localStorage.setItem('Authorization', JSON.stringify(res.data.data)); // 登录成功即将返回值保存
+      //     this.$store.commit('setUser', {
+      //       username: this.postDatas.username,
+      //       type: this.postDatas.type
+      //     });
+      //   }else { // 登录失败
+      //   }
+      // }).then((err) => {
+      //   console.log(err)
+      // })
      }else { // 未登录
       this.gotoLogin();
      }
@@ -163,16 +88,12 @@ export default {
       // console.log(name, this.$router);
       this.$router.push(`/${name}`);
     },
-    // 跳转到登录界面
+    // // 跳转到登录界面
     gotoLogin() {
-      localStorage.removeItem('Authorization');
-      this.$store.commit('setUser', {
-          username: null,
-          type: null
-      });
+      sessionStorage.setItem('Authorization', {type: 'user'});
       this.$router.push('/login');
     },
-    // 注销
+    // // 注销
     logout(name) {
       if (name === 'logout') {
         this.gotoLogin();
@@ -188,6 +109,18 @@ body, html, .layout
 .layout
   display: -webkit-box
   -webkit-box-orient: vertical
+.ivu-menu-primary
+  background #e6e6e6
+  div
+    height 100%
+    display flex
+    align-items center
+    justify-content space-between
+  .ivu-menu-item
+    color black !important
+  .nav-right-menu
+    a
+      color black !important
 h2
   margin-bottom: 20px
   font-size: 16px

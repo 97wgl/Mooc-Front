@@ -22,7 +22,7 @@
 </template>
 
 <script>
-
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -43,9 +43,12 @@ export default {
   },
   created() { // 在登录页的时候，将存在本地的Authorization清除
   },
+  computed: {
+    ...mapState({
+      user: 'user',
+    }),
+  },
   methods: {
-    loginSuccess(token, username, userpwd, role) {
-    },
     submitLogin(type) {
       let postData = {
         username: this.login.username,
@@ -56,12 +59,22 @@ export default {
         url: type == 'teacher' ? this.baseUrl + 'teacher/login' : this.baseUrl + 'admin/login',
         data: this.transformRequest(postData)
       }).then(res => {
-        console.log('res', res)
+        if(res.data.code == 0) {
+          let data = res.data.data
+          this.$Message.success(res.data.msg)
+          sessionStorage.setItem('Authorization', JSON.stringify(data));
+          let postData = {
+            'username': data.userInfo,
+            'type': data.type
+          }
+          this.$store.commit('setUser', postData);
+          console.log('user 学生', this.user)
+          this.$router.push('course_list')
+          // window.location.reload()
+          // window.location.href = '/course_list'
+        }
       })
       
-    },
-    registSubmit() {
-      this.$router.push('/register');
     }
   }
 };
