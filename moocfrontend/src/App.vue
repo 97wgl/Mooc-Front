@@ -50,14 +50,14 @@ export default {
   },
   created() { // 每次刷新页面，执行以下代码
     // 检验进入任何页面之前是否有登录，如果登录了，那么存入Authorization
-    //  if (sessionStorage.getItem('Authorization')) { // 如果登陆了
-    //   this.userInfo = JSON.parse(sessionStorage.getItem('Authorization')); // 拿到登录返回的结果，
-    //  }else { // 未登录 默认为用户界面
-    //   this.userInfo = {
-    //     type: 'user'
-    //   }
-    //   this.gotoLogin();
-    //  }
+     if (sessionStorage.getItem('Authorization')) { // 如果登陆了
+      this.userInfo = JSON.parse(sessionStorage.getItem('Authorization')); // 拿到登录返回的结果，
+     }else { // 未登录 默认为用户界面
+      this.userInfo = {
+        type: 'user'
+      }
+      this.gotoLogin();
+     }
   },
   methods: {
     // // 跳转到登录界面
