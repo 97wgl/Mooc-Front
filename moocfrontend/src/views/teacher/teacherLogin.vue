@@ -44,10 +44,16 @@ export default {
   created() { // 在登录页的时候，将存在本地的Authorization清除
   },
   computed: {
-    ...mapState({
-      user: 'user',
-    }),
+    user: {
+      get() {
+        return this.$store.state.equipment
+      },
+      set(value) {
+        this.$store.commit('setUser', value)
+      }
+    },
   },
+  
   methods: {
     submitLogin(type) {
       let postData = {

@@ -42,9 +42,11 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      user: 'user',
-    }),
+    user: {
+      get() {
+        return this.$store.state.user
+      }
+    },
   },
   created() { // 每次刷新页面，执行以下代码
     // 检验进入任何页面之前是否有登录，如果登录了，那么存入Authorization
@@ -56,6 +58,7 @@ export default {
       }
       this.gotoLogin();
      }
+     console.log('user', this.user)
   },
   mounted() {
     if (sessionStorage.getItem('Authorization')) { // 如果登陆了
