@@ -3,14 +3,14 @@
     <div class="f-header">
       <div class="f-header-box clearfix">
         <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
-        <nav class="header-nav" v-if="userInfo.type == 'user'">
+        <nav class="header-nav">
           <span class="header-nav-item" @click="$router.push('/index')">首页</span>
           <span class="header-nav-item" @click="$router.push('/course_list')">分类</span>
           <span class="header-nav-item" @click="$router.push('/myInfo')">我的</span>
           <span class="header-nav-item" @click="$router.push('/login')">登录</span>
           <span class="header-nav-item" @click="$router.push('/teacher_login')">我是老师</span>
         </nav>
-        <nav class="header-nav" v-if="userInfo.type == 'teacher'">
+        <!-- <nav class="header-nav" v-if="userInfo.type == 'teacher'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/comments_list')">评价管理</span>
           <span class="header-nav-item" @click="$router.push('/message_list')">留言管理</span>
@@ -19,13 +19,13 @@
         <nav class="header-nav" v-if="userInfo.type == 'admin'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/teacher_list')">教师管理</span>
-        </nav>
-        <nav>
+        </nav> -->
+        <!-- <nav>
           <span class="header-nav-item" style="float: right; margin-top: 30px;" @click="logout" v-if="userInfo.userInfo"> 退出登录 </span>
         </nav>
         <nav>
           <span class="header-nav-item" style="float: right; margin-top: 30px;"> {{userInfo.userInfo }}</span>
-        </nav>
+        </nav> -->
       </div>
     </div>
     <router-view/>
@@ -50,31 +50,16 @@ export default {
   },
   created() { // 每次刷新页面，执行以下代码
     // 检验进入任何页面之前是否有登录，如果登录了，那么存入Authorization
-     if (sessionStorage.getItem('Authorization')) { // 如果登陆了
-      this.userInfo = JSON.parse(sessionStorage.getItem('Authorization')); // 拿到登录返回的结果，
-     }else { // 未登录 默认为用户界面
-      this.userInfo = {
-        type: 'user'
-      }
-      this.gotoLogin();
-     }
-     console.log('user', this.user)
-  },
-  mounted() {
-    if (sessionStorage.getItem('Authorization')) { // 如果登陆了
-      this.userInfo = JSON.parse(sessionStorage.getItem('Authorization')); // 拿到登录返回的结果，
-    }else { // 未登录 默认为用户界面
-      this.userInfo = {
-        type: 'user'
-      }
-      this.gotoLogin();
-    }
+    //  if (sessionStorage.getItem('Authorization')) { // 如果登陆了
+    //   this.userInfo = JSON.parse(sessionStorage.getItem('Authorization')); // 拿到登录返回的结果，
+    //  }else { // 未登录 默认为用户界面
+    //   this.userInfo = {
+    //     type: 'user'
+    //   }
+    //   this.gotoLogin();
+    //  }
   },
   methods: {
-    menuRoute(name) {
-      // console.log(name, this.$router);
-      this.$router.push(`/${name}`);
-    },
     // // 跳转到登录界面
     gotoLogin() {
       sessionStorage.removeItem('Authorization');
