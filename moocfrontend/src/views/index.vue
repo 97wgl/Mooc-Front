@@ -66,7 +66,11 @@
             </a>
           </div>
           <div class="clearfix">
+<<<<<<< HEAD
             <a v-for="n in 4":key="n" href="javascript:void(0)">
+=======
+            <a v-for="n in 4" href="javascript:void(0)" :key="n">
+>>>>>>> 268e71976ee91be87fc154db3f77f7e37a959496
               <div v-bind:class="{'course-card-container':1,'course-card-last':n==4}">
                 <div class="course-card-top green-bg">
                   <span> Java </span>
@@ -88,7 +92,11 @@
       <!--名校讲师-start -->
       <div class="types-block clearfix">
         <h3 class="types-title">名校讲师</h3>
+<<<<<<< HEAD
         <div v-for='(item,index) in recomdTeacherList':key="index">
+=======
+        <div v-for='(item,index) in recomdTeacherList' :key="index">
+>>>>>>> 268e71976ee91be87fc154db3f77f7e37a959496
           <div v-bind:class="{'lecturer-card-container':1,'course-card-last':index==4}">
             <div class="lecturer-item">
               <img :src="baseUrl+item.headImg" class="lecturer-uimg" >

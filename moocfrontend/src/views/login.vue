@@ -24,17 +24,28 @@
         </form>
       </div>
     </div>
+    <div class="toast" v-if="showModal">
+      <span>{{message}}</span>
+    </div>
   </div>
 </template>
 <script>
-import $ from 'jquery';
+import $ from 'jquery'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
       myErrCode: -1,
       username: '',
       password: '',
+      message: '',
+      showModal: false,
     }
+  },
+  computed: {
+    ...mapState({
+      user: 'user',
+    }),
   },
   methods: {
     doSubmit() {
@@ -61,29 +72,16 @@ export default {
       
       this.$http({
         method: 'post',
-        url: this.baseUrl + 'admin/login',
+        url: this.baseUrl + 'user/login',
         data: this.transformRequest(postData)
       }).then(res => {
-        console.log(this.transformRequest(postData));
-        console.log('res', res)
-        // if(res.code == 0) {
-        //   this.$router.push('index')
-        // }else if(res.code == 1) {
-        //   $errorMsg.fadeIn().html("验证码错误");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }else if(res.errcode == 2) {
-        //   $errorMsg.fadeIn().html("用户不存在");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }else if(res.errcode == 3) {
-        //   $errorMsg.fadeIn().html("密码错误");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }
+        if(res.data.code == 0) {
+          let data = res.data.data
+          this.$Message.success(res.data.msg)
+          sessionStorage.setItem('Authorization', JSON.stringify(data));
+          this.$store.commit('setUser', postData);
+          this.$router.push('/index')
+        }
       })
     },
     handleInput(field) {
@@ -105,7 +103,20 @@ export default {
 }
 </script>
 <style>
-
+  .toast span{
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    background: white;
+    text-align: center;
+    border-radius: 4px;
+  }
 </style>
 
 
