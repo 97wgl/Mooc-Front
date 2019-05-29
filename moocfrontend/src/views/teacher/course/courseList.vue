@@ -74,11 +74,6 @@ export default {
           width: 60,
           align: 'center',
         },
-        // {
-        //   type: 'selection',
-        //   width: 60,
-        //   align: 'center',
-        // },
         {
           title: '课程名称',
           render: (h, params) => {

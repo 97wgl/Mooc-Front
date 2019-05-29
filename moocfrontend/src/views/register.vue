@@ -137,25 +137,15 @@ export default {
       
       this.$http({
         method: 'post',
-        url: this.baseUrl +'/user/regist',
+        url: this.baseUrl +'user/regist',
         data: this.transformRequest(postData)
       }).then(res => {
-        console.log('res', res)
-        // if(res.errcode == 0) {
-        //   this.$router.push('index')
-        // }else if(res.errcode == 1) {
-        //   $errorMsg.fadeIn().html("验证码错误");
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }else if(res.errcode == 2) {
-        //   $errorMsg.fadeIn().html("用户不存在");
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }else if(res.errcode == 3) {
-        //   $errorMsg.fadeIn().html("密码错误");
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }
+        if(res.data.code == 0) {
+          this.$Message.success(res.data.msg)
+          this.$router.push('/login')
+        }else {
+          this.$Message.error(res.data.msg)
+        }  
       })
     },
     handleInput(field) {

@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -43,17 +42,6 @@ export default {
   },
   created() { // 在登录页的时候，将存在本地的Authorization清除
   },
-  computed: {
-    user: {
-      get() {
-        return this.$store.state.equipment
-      },
-      set(value) {
-        this.$store.commit('setUser', value)
-      }
-    },
-  },
-  
   methods: {
     submitLogin(type) {
       let postData = {
@@ -69,15 +57,7 @@ export default {
           let data = res.data.data
           this.$Message.success(res.data.msg)
           sessionStorage.setItem('Authorization', JSON.stringify(data));
-          let postData = {
-            'username': data.userInfo,
-            'type': data.type
-          }
-          this.$store.commit('setUser', postData);
-          console.log('user 学生', this.user)
-          this.$router.push('course_list')
-          // window.location.reload()
-          // window.location.href = '/course_list'
+          this.$router.push('/course_list')
         }
       })
       

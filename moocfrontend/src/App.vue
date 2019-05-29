@@ -7,7 +7,6 @@
           <span class="header-nav-item" @click="$router.push('/index')">首页</span>
           <span class="header-nav-item" @click="$router.push('/course_list')">分类</span>
           <span class="header-nav-item" @click="$router.push('/myInfo')">我的</span>
-          <span class="header-nav-item" @click="$router.push('/login')">登录</span>
           <span class="header-nav-item" @click="$router.push('/teacher_login')">我是老师</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'teacher'">
@@ -19,6 +18,9 @@
         <nav class="header-nav" v-if="userInfo.type == 'admin'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/teacher_list')">教师管理</span>
+        </nav>
+        <nav>
+           <span style="margin-top: 30px;" class="header-nav-item" @click="$router.push('/login')" v-if="!userInfo.userInfo">用户登录</span>
         </nav>
         <nav>
           <span class="header-nav-item" style="float: right; margin-top: 30px;" @click="logout" v-if="userInfo.userInfo"> 退出登录 </span>
@@ -60,13 +62,13 @@ export default {
      }
   },
   methods: {
-    // // 跳转到登录界面
+    // 跳转到登录界面
     gotoLogin() {
       sessionStorage.removeItem('Authorization');
       this.userInfo = {
         type: 'user'
       }
-      this.$router.push('/');
+      this.$router.push('/index');
     },
     // // 注销
     logout() {

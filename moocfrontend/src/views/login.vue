@@ -74,12 +74,7 @@ export default {
           let data = res.data.data
           this.$Message.success(res.data.msg)
           sessionStorage.setItem('Authorization', JSON.stringify(data));
-          let postData = {
-            'username': data.userInfo,
-            'type': data.type
-          }
           this.$store.commit('setUser', postData);
-          console.log('user 学生', this.user)
           this.$router.push('/index')
         }
       })
