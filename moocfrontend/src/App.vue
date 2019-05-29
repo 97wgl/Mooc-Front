@@ -6,7 +6,7 @@
         <nav class="header-nav">
           <span class="header-nav-item" @click="$router.push('/')">首页</span>
           <span class="header-nav-item" @click="$router.push('list')">分类</span>
-          <span class="header-nav-item" @click="$router.push('login')">我的</span>
+          <span class="header-nav-item" @click="$router.push('myArea')">我的</span>
           <span class="header-nav-item" @click="$router.push('login')">登录</span>
         </nav>
       </div>

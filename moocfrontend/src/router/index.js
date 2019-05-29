@@ -41,5 +41,19 @@ export default new Router({
       path: '/list',
       component: (resolve) => require(['../views/list.vue'], resolve)
     },
+    {
+      path: '/myArea',
+      component: (resolve) => require(['../views/stuArea.vue'], resolve),
+      children: [
+        {
+            path: '/',
+            component: resolve => require(['../components/userInfo.vue'], resolve)
+        },
+        {
+            path: '/modifyPassword',
+            component: resolve => require(['../components/modifyPassword.vue'], resolve)
+        }
+      ]
+    }
   ]
 })
