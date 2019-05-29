@@ -160,12 +160,12 @@ export default {
   data() {
     return {
       course: {
-        name: '带您完成神秘的涟漪按钮效果-入门篇',
+        name: '',
         studyCount: 5,
         level: 1,
-        time: '2小时25分钟',
+        time: '',
         score: '',
-        brief: '这是一节xxx的课程',
+        brief: '',
         id: 1
       },
       courseTeacher: {
@@ -226,11 +226,23 @@ export default {
     },
     submitComment() {
       let postData = {
-        comment: this.comment,
+        // u_id: sessionStorage.getItem(''),
+        course_id: this.course.id, 
+        content: this.comment,
         score: this.stars.filter(item => item.type).length
       }
-      // 在请求发送成功之后
-      this.isShowModal = !this.isShowModal
+      this.$http({
+        method: 'post',
+        url: this.baseUrl + 'course-evaluation',
+        data: postData
+      }).then(res => {
+        if(res.data.code == 0) {
+          this.$Message.success('评价成功')
+          this.isShowModal = !this.isShowModal
+        }else {
+          this.$Message.success('评价失败')
+        }
+      })
     },
     /**
 	 * 播放视频之前进行登录判断
