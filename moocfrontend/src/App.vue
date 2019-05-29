@@ -3,38 +3,78 @@
     <div class="f-header">
       <div class="f-header-box clearfix">
         <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
-        <nav class="header-nav">
-          <span class="header-nav-item" @click="$router.push('/')">首页</span>
-          <span class="header-nav-item" @click="$router.push('list')">分类</span>
-          <span class="header-nav-item" @click="$router.push('login')">我的</span>
-          <span class="header-nav-item" @click="$router.push('login')">登录</span>
+        <nav class="header-nav" v-if="userInfo.type == 'user'">
+          <span class="header-nav-item" @click="$router.push('/index')">首页</span>
+          <span class="header-nav-item" @click="$router.push('/course_list')">分类</span>
+          <span class="header-nav-item" @click="$router.push('/myInfo')">我的</span>
+          <span class="header-nav-item" @click="$router.push('/teacher_login')">我是老师</span>
+        </nav>
+        <nav class="header-nav" v-if="userInfo.type == 'teacher'">
+          <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
+          <span class="header-nav-item" @click="$router.push('/comments_list')">评价管理</span>
+          <span class="header-nav-item" @click="$router.push('/message_list')">留言管理</span>
+          <span class="header-nav-item" @click="$router.push('/myInfo')">个人信息管理</span>
+        </nav>
+        <nav class="header-nav" v-if="userInfo.type == 'admin'">
+          <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
+          <span class="header-nav-item" @click="$router.push('/teacher_list')">教师管理</span>
+        </nav>
+        <nav>
+           <span style="margin-top: 30px;" class="header-nav-item" @click="$router.push('/login')" v-if="!userInfo.userInfo">用户登录</span>
+        </nav>
+        <nav>
+          <span class="header-nav-item" style="float: right; margin-top: 30px;" @click="logout" v-if="userInfo.userInfo"> 退出登录 </span>
+        </nav>
+        <nav>
+          <span class="header-nav-item" style="float: right; margin-top: 30px;"> {{userInfo.userInfo }}</span>
         </nav>
       </div>
     </div>
     <router-view/>
-    <div class="f-footer">
-      <div class="f-footer-box clearfix">
-        <div class="footer-link">
-          <a href="javascript:void(0)" target="_blank" title="企业合作">企业合作</a>
-          <a href="javascript:void(0)" target="_blank" title="联系我们">联系我们</a>
-          <a href="javascript:void(0)" target="_blank" title="常见问题">常见问题</a>
-          <a href="javascript:void(0)" target="_blank" title="意见反馈">意见反馈</a>
-          <a href="javascript:void(0)" target="_blank" title="友情链接">友情链接</a>
-        </div>
-        <div class="footer-copyright">
-          <span>©&nbsp;2018&nbsp; 备案 </span>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'App',
+  data() {
+    return {
+      // 用户看得到这个表头
+      userInfo: null
+    }
+  },
+  computed: {
+    user: {
+      get() {
+        return this.$store.state.user
+      }
+    },
+  },
+  created() { // 每次刷新页面，执行以下代码
+    // 检验进入任何页面之前是否有登录，如果登录了，那么存入Authorization
+     if (sessionStorage.getItem('Authorization')) { // 如果登陆了
+      this.userInfo = JSON.parse(sessionStorage.getItem('Authorization')); // 拿到登录返回的结果，
+     }else { // 未登录 默认为用户界面
+      this.userInfo = {
+        type: 'user'
+      }
+      this.gotoLogin();
+     }
+  },
   methods: {
-
-  }
+    // 跳转到登录界面
+    gotoLogin() {
+      sessionStorage.removeItem('Authorization');
+      this.userInfo = {
+        type: 'user'
+      }
+      this.$router.push('/index');
+    },
+    // // 注销
+    logout() {
+      this.gotoLogin();
+    },
+  },
 }
 </script>
 

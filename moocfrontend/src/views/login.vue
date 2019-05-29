@@ -30,7 +30,8 @@
   </div>
 </template>
 <script>
-import $ from 'jquery';
+import $ from 'jquery'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -40,6 +41,11 @@ export default {
       message: '',
       showModal: false,
     }
+  },
+  computed: {
+    ...mapState({
+      user: 'user',
+    }),
   },
   methods: {
     doSubmit() {
@@ -69,40 +75,13 @@ export default {
         url: this.baseUrl + 'user/login',
         data: this.transformRequest(postData)
       }).then(res => {
-        console.log('res', res)
         if(res.data.code == 0) {
-          this.message = res.data.msg
-          this.showModal = true
-          setTimeout(function () {
-            //  this.$router.push('/index')
-             this.showModal = false
-          }, 1500)
-         
-        }else {
-          this.message = res.data.msg
-          this.showModal = true
+          let data = res.data.data
+          this.$Message.success(res.data.msg)
+          sessionStorage.setItem('Authorization', JSON.stringify(data));
+          this.$store.commit('setUser', postData);
+          this.$router.push('/index')
         }
-        // setTimeout(function () {
-        //   this.showModal = false
-        // }, 1500)
-        // if(res.code == 0) {
-        //   this.$router.push('index')
-        // }else if(res.code == 1) {
-        //   $errorMsg.fadeIn().html("验证码错误");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }else if(res.errcode == 2) {
-        //   $errorMsg.fadeIn().html("用户不存在");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }else if(res.errcode == 3) {
-        //   $errorMsg.fadeIn().html("密码错误");
-        //   reloadIndityImg('indeityImgLogin');
-        //   this.myErrCode = 0;
-        //   $identiryCode.val('')
-        // }
       })
     },
     handleInput(field) {
