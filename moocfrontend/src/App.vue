@@ -3,14 +3,14 @@
     <div class="f-header">
       <div class="f-header-box clearfix">
         <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
-        <nav class="header-nav">
+        <nav class="header-nav" v-if="userInfo.type == 'user'">
           <span class="header-nav-item" @click="$router.push('/index')">首页</span>
           <span class="header-nav-item" @click="$router.push('/course_list')">分类</span>
           <span class="header-nav-item" @click="$router.push('/myInfo')">我的</span>
           <span class="header-nav-item" @click="$router.push('/login')">登录</span>
           <span class="header-nav-item" @click="$router.push('/teacher_login')">我是老师</span>
         </nav>
-        <!-- <nav class="header-nav" v-if="userInfo.type == 'teacher'">
+        <nav class="header-nav" v-if="userInfo.type == 'teacher'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/comments_list')">评价管理</span>
           <span class="header-nav-item" @click="$router.push('/message_list')">留言管理</span>
@@ -19,13 +19,13 @@
         <nav class="header-nav" v-if="userInfo.type == 'admin'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/teacher_list')">教师管理</span>
-        </nav> -->
-        <!-- <nav>
+        </nav>
+        <nav>
           <span class="header-nav-item" style="float: right; margin-top: 30px;" @click="logout" v-if="userInfo.userInfo"> 退出登录 </span>
         </nav>
         <nav>
           <span class="header-nav-item" style="float: right; margin-top: 30px;"> {{userInfo.userInfo }}</span>
-        </nav> -->
+        </nav>
       </div>
     </div>
     <router-view/>
