@@ -571,6 +571,10 @@ a:focus {
   font-weight: 200;
 }
 
+.course-card-last {
+  margin-right: 0px!important;
+}
+
 .green-bg {
   background-color: #04B95C;
 }
