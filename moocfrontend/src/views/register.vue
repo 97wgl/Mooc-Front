@@ -141,6 +141,12 @@ export default {
         data: this.transformRequest(postData)
       }).then(res => {
         console.log('res', res)
+        if(res.code == 0) {// 注册成功跳转到首页
+          alert(res.mess)
+          this.$router.push('/')
+        }else {
+          alert(res.mess)
+        }
         // if(res.errcode == 0) {
         //   this.$router.push('index')
         // }else if(res.errcode == 1) {

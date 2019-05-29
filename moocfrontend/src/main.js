@@ -5,7 +5,9 @@ import axios from 'axios'
 import {baseUrl, transformRequest} from './assets/js/util'
 
 Vue.config.productionTip = false
+axios.defaults.withCredentials = true
 Vue.prototype.$http = axios
+
 Vue.prototype.baseUrl = baseUrl
 Vue.prototype.transformRequest = transformRequest
 // window.$axios = axios;
