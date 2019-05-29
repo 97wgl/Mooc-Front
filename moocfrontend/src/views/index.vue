@@ -15,7 +15,7 @@
       <div class="types-block clearfix">
         <h3 class="types-title">好课推荐</h3>
         <div v-for="(item,index) in goodCourseList" class="types-content" :key="index">
-          <a href="javascript:void(0)">
+          <a @click="JumpToCourseDetail(item.courseId)">
             <div v-bind:class="{'course-card-container':1,'course-card-last':index==4}">
               <div v-bind:class="{'course-card-top':1,'brown-bg':index==0,'gray-bg':index==1,'purple-bg':index==2,'pink-bg':index==3,'green-bg':index==4}" >
                 <span>{{item.classify}}</span>
@@ -141,7 +141,11 @@ export default {
       }
     };
   },
-  methods: {},
+  methods: {
+    JumpToCourseDetail(courseId) {
+      this.$router.push(`/course_detail/${courseId}`)
+    }
+  },
   computed: {
     getLevel(){
       return function(level){

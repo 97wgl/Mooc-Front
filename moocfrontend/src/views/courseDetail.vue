@@ -43,7 +43,7 @@
             
             <div class="static-item" style="border:none;">
               <div class="meta">课程评分</div>
-              <div class="meta-value"> {{course.score}} </div>
+              <div class="meta-value"> {{course.score | numFilter}} </div>
             </div>
           </div>
 
@@ -99,13 +99,27 @@
 
         <!-- 评论区 start -->
         <div id="comment" v-else>
-          评论
+          <div class="comment clearfix" v-for="(item, index) in commentList" :key="index">
+            <div class="comment-header">
+              <img class="lecturer-uimg" src="http://111.230.240.26:8080/yourmooc/resources/images/header.jpg">
+            </div>
+            <div class="comment-main">
+              <div class="user-name">
+                <span>{{item.userName}}</span>
+              </div>
+              <div class="comment-conetnt">{{item.content}}</div>
+              <div class="comment-footer">
+                <span>{{item.time}}</span>
+                <a>{{item.courseName}}</a>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- 评论区 end -->
 
       </div>
 
-      <!-- 教师信息&推荐课程 - start -->
+      <!-- 教师信息 - start -->
       <div class="main-course-right">
         <div v-if="!courseTeacher.username">
           <div class="lecturer-item" style="width: 100%;">
@@ -159,12 +173,12 @@ export default {
         collegeName: '',
         title: '',
         sign: '',
-
       },
       curCourseSection: {},
       session_username: '',
       isComment: 'no', // 默认展示章节
       chaptSections: [],
+      commentList: [],
       stars:[{
         type: false
       },{
@@ -182,7 +196,28 @@ export default {
       comment: ''
     }
   },
+  created() {
+    this.course.id = this.$route.params.id
+    this.getCourseDetail()
+    this.getAllCommentList()
+  },
+  filters: {
+    numFilter(value) {
+      return parseFloat(value).toFixed(1)
+    }
+  },
   methods: {
+    getCourseDetail() {
+      this.$http.get(this.baseUrl + `course/detail?courseId=${this.course.id}`).then(res => {
+        let data = res.data.data
+        this.course = res.data.data
+      })
+    },
+    getAllCommentList() {
+      this.$http.get(this.baseUrl + `course-evaluation?course_id=${this.course.id}&page=1&limit=20`).then(res => {
+        this.commentList = res.data.data
+      })
+    },
     showModal() {
       this.isShowModal = true
     },
@@ -200,23 +235,23 @@ export default {
     /**
 	 * 播放视频之前进行登录判断
    */
-	playVideo( id) {
-    if (!isLogin()) { // 没有登录则跳转到登录界面
-      this.$router.push('/login')
-		} else {
-      location.href = "<%=path %>/course/video/" + id;
-      this.$router.push('/')
-		}
-  },
-  /**
-	 * 判断是否登录
-   */
-  isLogin() {
-    var session_username = '${session_username}'; // session_storage 登录注册的时候获取到session存在浏览器中
-    if (!session_username) {
-      return false;
-    }
-    return true;
+    playVideo( id) {
+      if (!isLogin()) { // 没有登录则跳转到登录界面
+        this.$router.push('/login')
+      } else {
+        location.href = "<%=path %>/course/video/" + id;
+        this.$router.push('/')
+      }
+    },
+    /**
+     * 判断是否登录
+     */
+    isLogin() {
+      var session_username = '${session_username}'; // session_storage 登录注册的时候获取到session存在浏览器中
+      if (!session_username) {
+        return false;
+      }
+      return true;
     }
   }
 }

@@ -28,7 +28,7 @@ export default new Router({
       component: (resolve) => require(['../views/register.vue'], resolve)
     },
     {
-      path: '/course_detail', // 后面需要加参数
+      path: '/course_detail/:id', // 后面需要加参数
       name: 'course_Detail',
       component: (resolve) => require(['../views/courseDetail.vue'], resolve)
     },

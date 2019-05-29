@@ -12,7 +12,7 @@
       </div>
     </div>
     <router-view/>
-    <div class="f-footer">
+    <!-- <div class="f-footer">
       <div class="f-footer-box clearfix">
         <div class="footer-link">
           <a href="javascript:void(0)" target="_blank" title="企业合作">企业合作</a>
@@ -25,7 +25,7 @@
           <span>©&nbsp;2018&nbsp; 备案 </span>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
