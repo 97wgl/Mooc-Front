@@ -42,5 +42,10 @@ export default {
       })
     }
   },
+  created() {
+    if(!sessionStorage.getItem('Authorization')){
+      this.$router.push('/login');
+    }
+  },
 }
 </script>

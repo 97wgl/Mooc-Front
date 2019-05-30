@@ -17,9 +17,10 @@
           <!-- <%--提示信息--%> -->
           <li id="errorMsg" class="clearfix" style="display: none;color:red;"></li>
 
-          <li class="clearfix" style="margin-top: 20px;">
+          <li class="clearfix" style="margin-top: 20px;margin-left:100px;">
             <input type="button" value="登录" class="btn" style="margin-right:20px;" @click="doSubmit">
             <input type="button" value="注册" class="btn"  @click="$router.push('register')">
+            <a href="javascript:void(0)" @click="$router.push('/teacher_login')" class="link">我是老师</a>
           </li>
         </form>
       </div>
@@ -81,6 +82,8 @@ export default {
           sessionStorage.setItem('Authorization', JSON.stringify(data));
           this.$store.commit('setUser', postData);
           this.$router.push('/index')
+        }else{
+          this.$Message.error(res.data.msg)
         }
       })
     },
@@ -116,6 +119,12 @@ export default {
     background: white;
     text-align: center;
     border-radius: 4px;
+  }
+  .link{
+    color: blue;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 40px;
   }
 </style>
 

@@ -7,7 +7,6 @@
           <span class="header-nav-item" @click="$router.push('/index')">首页</span>
           <span class="header-nav-item" @click="$router.push('/list')">分类</span>
           <span class="header-nav-item" @click="$router.push('/myArea')">我的</span>
-          <span class="header-nav-item" @click="$router.push('/teacher_login')">我是老师</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'teacher'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>

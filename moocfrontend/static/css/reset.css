@@ -152,7 +152,8 @@ a:focus {
   color: #FFF;
   border-radius: 4px;
   height: 34px;
-  border: 0
+  border: 0;
+  cursor: pointer;
 }
 
 .btn:hover {

@@ -6,6 +6,8 @@
       <li>
         <label for="name">用户名</label>
         <input @focus="handleInput('name')" type="text" id="name" class="input-text" v-model="name">
+        <input v-if="isUser" type="button" class="btn" value="成为老师" @click="onRegisterFunc" style="float: right;">
+			  <teacherRegister ref="showRegister"></teacherRegister>
       </li>
       <li>
         <label>性别</label>
@@ -35,7 +37,8 @@
 </template>
 
 <script>
-import $ from 'jquery'
+import $ from 'jquery';
+import teacherRegister from '../views/teacher/teacherRegister';
 export default {
   data() {
     return {
@@ -45,8 +48,12 @@ export default {
       email: '',
       tel:'',
       remark: '',
-      u_id: ''
+      u_id: '',
+      isUser: 1
     }
+  },
+	components:{
+    teacherRegister
   },
   methods: {
     save() { // 保存修改
@@ -124,11 +131,15 @@ export default {
       } else if (field==='email' && (this.myErrCode === 4 || this.myErrCode === 5)) {
         $errorMsg.fadeOut()
       }
+    },
+    onRegisterFunc(){ //点击成为老师  
+      this.$refs.showRegister.show();
     }
   },
   created() {
-    let userInfo = sessionStorage.getItem('Authorization');
-    this.u_id = JSON.parse(userInfo).id;
+    let userInfo = JSON.parse(sessionStorage.getItem('Authorization'));
+    this.u_id = userInfo.id;
+    this.isUser = userInfo.type == 'user'? 1: 0;
     this.$http({
       method: 'get',
       url: this.baseUrl +'user?'+this.transformRequest({
