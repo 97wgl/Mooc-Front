@@ -57,7 +57,8 @@ export default {
           let data = res.data.data
           this.$Message.success(res.data.msg)
           sessionStorage.setItem('Authorization', JSON.stringify(data));
-          this.$router.push('/course_list')
+          var route = type == 'teacher' ? '/course_list' : '/course_examine';
+          this.$router.push(route);
         }
       })
       

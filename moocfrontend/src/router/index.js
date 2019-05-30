@@ -74,6 +74,14 @@ export default new Router({
       path: '/course_detail/:id',
       name: 'course_detail',
       component: (resolve) => require(['../views/teacher/course/courseDetail.vue'], resolve)
+    },
+    {
+      path: '/teacher_examine',
+      component: (resolve) => require(['../views/teacher/teacherExamine.vue'], resolve)
+    },
+    {
+      path: '/course_examine',
+      component: (resolve) => require(['../views/teacher/course/courseExamine.vue'], resolve)
     }
   ]
 })

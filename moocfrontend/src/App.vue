@@ -15,8 +15,8 @@
           <span class="header-nav-item" @click="$router.push('/myInfo')">个人信息管理</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'admin'">
-          <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
-          <span class="header-nav-item" @click="$router.push('/teacher_list')">教师管理</span>
+          <span class="header-nav-item" @click="$router.push('/course_examine')">课程管理</span>
+          <span class="header-nav-item" @click="$router.push('/teacher_examine')">教师管理</span>
         </nav>
         <nav>
            <span style="margin-top: 30px;" class="header-nav-item" @click="$router.push('/login')" v-if="!userInfo.userInfo">用户登录</span>
