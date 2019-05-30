@@ -53,7 +53,11 @@ export default new Router({
       component: (resolve) => require(['../views/teacher/course/courseCreate.vue'], resolve)
     },
     {
-      path: '/myArea',
+      path: '/list',
+      component: (resolve) => require(['../views/list.vue'], resolve)
+    },
+    {
+      path: '/myArea',//我的
       component: (resolve) => require(['../views/stuArea.vue'], resolve),
       children: [
         {

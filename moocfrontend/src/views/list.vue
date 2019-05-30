@@ -3,7 +3,7 @@
     <div class="f-main clearfix">
       <!-- 一级分类-start -->
       <div class="course-nav-row clearfix">
-        <span class="hd" style="margin-top:12px;">分类</span>
+        <span class="hd">分类</span>
         <ul class="course-nav">
           <li class="course-nav-item " v-for="(item,index) in firstLevelList":key="index"
            v-bind:class="{'cur-course-nav':item.isActive}"> 
