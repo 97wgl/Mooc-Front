@@ -1,13 +1,11 @@
 <template>
-  <div class="setting-right">
+  <div class="infoArea">
     <div><span class="f-16">个人信息</span></div>
     <div class="split-line" style="margin: 20px 0px;"></div>
     <form action="put" class="oc-form">
       <li>
         <label for="name">用户名</label>
         <input @focus="handleInput('name')" type="text" id="name" class="input-text" v-model="name">
-        <input v-if="isUser" type="button" class="btn" value="成为老师" @click="onRegisterFunc" style="float: right;">
-			  <teacherRegister ref="showRegister"></teacherRegister>
       </li>
       <li>
         <label>性别</label>
@@ -15,6 +13,14 @@
         <label for="man" class="radioLabel">男</label>
         <input @focus="handleInput('sex')" type="radio" id="woman" value="M" class="input-radio" v-model="sex">
         <label for="woman" class="radioLabel">女</label>
+      </li>
+      <li>
+        <label for="organization">单位</label>
+        <input @focus="handleInput('organization')" type="text" id="organization" class="input-text" v-model="organization">
+      </li>
+      <li>
+        <label for="position">职位</label>
+        <input @focus="handleInput('position')" type="text" id="position" class="input-text" v-model="position">
       </li>
       <li>
         <label for="tel">电话</label>
@@ -38,22 +44,19 @@
 
 <script>
 import $ from 'jquery';
-import teacherRegister from '../views/teacher/teacherRegister';
 export default {
   data() {
     return {
       myErrCode: -1,
       name: '',
       sex: '',
+      organization: '',
+      position: '',
       email: '',
       tel:'',
       remark: '',
-      u_id: '',
-      isUser: 1
+      teacherId: ''
     }
-  },
-	components:{
-    teacherRegister
   },
   methods: {
     save() { // 保存修改
@@ -71,6 +74,20 @@ export default {
       if(!this.sex) {
         $errorMsg.fadeIn().html("性别不能为空");
         this.myErrCode = 1;
+        return;
+      }
+      
+      // 验证单位
+      if(!this.sex) {
+        $errorMsg.fadeIn().html("单位名称不能为空");
+        this.myErrCode = 6;
+        return;
+      }
+      
+      // 验证职位
+      if(!this.sex) {
+        $errorMsg.fadeIn().html("职位不能为空");
+        this.myErrCode = 7;
         return;
       }
 
@@ -101,17 +118,22 @@ export default {
       }
 
       let postData = {
-        u_id: this.u_id,
+        teaId: this.teacherId,
         name: this.name,
         sex: this.sex,
+        orgnization: this.organization,
+        position: this.position,
         email: this.email,
         tel: this.tel,
         remark: this.remark
       }
       this.$http({
         method: 'put',
-        url: this.baseUrl +'user/info',
-        data: this.transformRequest(postData)
+        url: this.baseUrl +'teacher/info',
+        headers: {
+          'Content-Type':'application/json'
+        },
+        data: JSON.stringify(postData)
       }).then(res => {
         if(res.data.code == 0) {
           this.$Message.success(res.data.msg)
@@ -126,35 +148,45 @@ export default {
         $errorMsg.fadeOut()
       } else if (field==='sex' && this.myErrCode === 1) {
         $errorMsg.fadeOut()
+      }else if (field==='organization' && this.myErrCode === 6) {
+        $errorMsg.fadeOut()
+      } else if (field==='position' && this.myErrCode === 7) {
+        $errorMsg.fadeOut()
       } else if (field==='tel' && (this.myErrCode === 2 || this.myErrCode == 3)) {
         $errorMsg.fadeOut()
       } else if (field==='email' && (this.myErrCode === 4 || this.myErrCode === 5)) {
         $errorMsg.fadeOut()
       }
-    },
-    onRegisterFunc(){ //点击成为老师  
-      this.$refs.showRegister.show();
     }
   },
   created() {
     let userInfo = JSON.parse(sessionStorage.getItem('Authorization'));
-    this.u_id = userInfo.id;
-    this.isUser = userInfo.type == 'user'? 1: 0;
+    this.teacherId = userInfo.id;
     this.$http({
       method: 'get',
-      url: this.baseUrl +'user?'+this.transformRequest({
-        'u_id': this.u_id
+      url: this.baseUrl +'teacher/info?'+this.transformRequest({
+        'teacherId': this.teacherId
         }),
     }).then(res => {
       if(res.data && res.data.data){
         let userData = res.data.data;
         this.name = userData.name;
         this.sex = userData.sex;
+        this.organization = userData.orgnization;
+        this.position = userData.position;
         this.tel = userData.tel;
         this.email = userData.email;
         this.remark = userData.remark;
       }
     });
-  }
+  },
 }
 </script>
+
+<style scoped>
+.infoArea{
+  height: 100%;
+  width: 70%;
+  margin: 30px auto;
+}
+</style>

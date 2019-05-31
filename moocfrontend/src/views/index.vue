@@ -146,7 +146,7 @@ export default {
     getLevel(){
       return function(level){
         if(level == "1") return "初级";
-        else if(level == "1") return "中级";
+        else if(level == "2") return "中级";
         else return "高级"
       }
     }

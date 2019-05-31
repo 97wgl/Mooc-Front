@@ -13,8 +13,8 @@
             <input type="text" id="position" class="input-text" v-model="position" @focus="handleInput('position')">
           </li>
           <li>
-            <!-- <label for="">证明材料</label> -->
-            <input type="file" name="lll" id="" multiple>
+            <label>证明材料</label>
+            <input type="file" multiple @change="addFile" ref="inputer">
           </li>
         </form>
         <li id="errorMsg" class="clearfix" style="display:none;color:red;margin-left:190px;"></li>
@@ -37,15 +37,20 @@ export default {
   data () {
     return {
       isShowConfirm: false,
-      content: 'Say Something',
-      outerData: null,
+      userId: '',
       depart: '',
-      position: ''
+      position: '',
+      temp: [],
+      applyMaterial: []
     }
   },
   methods: {
     show () {
-      this.isShowConfirm = true
+      this.depart = '';
+      this.position = '';
+      this.temp= [];
+      this.applyMaterial = [];
+      this.isShowConfirm = true;
     },
     hidden () {
       this.isShowConfirm = false
@@ -53,8 +58,17 @@ export default {
     clickCancel() {
       this.hidden()
     },
+    addFile(){
+      let inputDOM = this.$refs.inputer;
+      // 通过DOM取文件数据
+      this.temp = inputDOM.files;
+      for(let key in this.temp){
+        if(!Number.isNaN(parseInt(key))){
+          this.applyMaterial.push(this.temp[key]);
+        }
+      }
+    },
     clickRegister(){
-      console.log(222)
       var $errorMsg = $('#errorMsg');
       //验证单位名称
       if (!this.depart) {
@@ -70,6 +84,23 @@ export default {
         return;
       }
 
+      var formData = new FormData();
+      formData.append('userId', this.userId);
+      formData.append('position', this.position);
+      formData.append('organization', this.depart);
+      formData.append('applyMaterial', this.applyMaterial); 
+      this.$http({
+        method: 'post',
+        url: this.baseUrl +'user/apply',
+        data: formData
+      }).then(res => {
+        if(res.data.code == 0) {
+          this.$Message.success(res.data.msg);
+          this.hidden();
+        }else {
+          this.$Message.error(res.data.msg)
+        }  
+      });
     },
     handleInput(field) {
       var $errorMsg = $('#errorMsg');
@@ -79,6 +110,10 @@ export default {
         $errorMsg.fadeOut()
       }
     },
+  },
+  created() {
+    let userInfo = JSON.parse(sessionStorage.getItem('Authorization'));
+    this.userId = userInfo.id;
   }
 }
 </script>

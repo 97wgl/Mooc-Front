@@ -71,7 +71,6 @@ export default {
         oldPwd: this.oldPwd,
         newPwd: this.newPwd
       }
-      console.log(postData)
       this.$http({
         method: 'put',
         url: this.baseUrl +'user/password',
@@ -80,7 +79,8 @@ export default {
         if(res.data.code == 0) {
           this.$Message.success(res.data.msg)
         }else {
-          this.$Message.error(res.data.msg)
+          this.$Message.error(res.data.msg);
+          this.oldPwd = '';this.newPwd = '';this.rePwd = '';
         }  
       });
     },

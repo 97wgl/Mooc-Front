@@ -36,8 +36,7 @@
           </div>
         </div>
       </div>
-    </div>
-      <!-- 二级分类-end -->
+      <!-- 课程列表-end -->
     </div>
   </div>
 </template>
@@ -118,7 +117,7 @@ export default {
     getLevel(){
       return function(level){
         if(level == "1") return "初级";
-        else if(level == "1") return "中级";
+        else if(level == "2") return "中级";
         else return "高级"
       }
     }

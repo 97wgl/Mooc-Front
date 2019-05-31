@@ -25,7 +25,8 @@ export default {
   data(){
     return {
       items:[
-        {title: "个人信息",index: "myArea",isActive:1},
+        {title: "学习记录",index: "myArea",isActive:1},
+        {title: "个人信息",index: "userInfo",isActive:0},
         {title: "修改密码",index: "modifyPassword",isActive:0}
       ]
     }
