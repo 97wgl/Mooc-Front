@@ -5,10 +5,8 @@
         <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
         <nav class="header-nav" v-if="userInfo.type == 'user'">
           <span class="header-nav-item" @click="$router.push('/index')">首页</span>
-          <span class="header-nav-item" @click="$router.push('/course_list')">分类</span>
-          <span class="header-nav-item" @click="$router.push('/myInfo')">我的</span>
-          <span class="header-nav-item" @click="$router.push('/teacher_login')">我是老师</span>
-          <span class="header-nav-item" @click="$router.push('/my_information')">我的通知</span>
+          <span class="header-nav-item" @click="$router.push('/list')">分类</span>
+          <span class="header-nav-item" @click="$router.push('/myArea')">我的</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'teacher'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
@@ -17,8 +15,8 @@
           <span class="header-nav-item" @click="$router.push('/my_information')">个人信息管理</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'admin'">
-          <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
-          <span class="header-nav-item" @click="$router.push('/teacher_list')">教师管理</span>
+          <span class="header-nav-item" @click="$router.push('/course_examine')">课程管理</span>
+          <span class="header-nav-item" @click="$router.push('/teacher_examine')">教师管理</span>
         </nav>
         <nav>
            <span style="margin-top: 30px;" class="header-nav-item" @click="$router.push('/login')" v-if="!userInfo.userInfo">用户登录</span>

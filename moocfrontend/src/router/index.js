@@ -72,6 +72,48 @@ export default new Router({
 
       },
       component: (resolve) => require(['../views/myInformation.vue'], resolve)
+    },{
+      path: '/list',
+      component: (resolve) => require(['../views/list.vue'], resolve)
+    },
+    {
+      path: '/myArea',//我的
+      component: (resolve) => require(['../views/stuArea.vue'], resolve),
+      children: [
+        {
+            path: '/',
+            component: resolve => require(['../components/studyRecord.vue'], resolve)
+        },
+        {
+            path: '/userInfo',
+            component: resolve => require(['../components/userInfo.vue'], resolve)
+        },
+        {
+            path: '/modifyPassword',
+            component: resolve => require(['../components/modifyPassword.vue'], resolve)
+        }
+      ]
+    },
+    {
+      path: '/course_detail/:id',
+      name: 'course_detail',
+      component: (resolve) => require(['../views/teacher/course/courseDetail.vue'], resolve)
+    },
+    { //管理员 —— 教师管理
+      path: '/teacher_examine',
+      component: (resolve) => require(['../views/teacher/teacherExamine.vue'], resolve)
+    },
+    { //管理员 —— 课程审核
+      path: '/course_examine',
+      component: (resolve) => require(['../views/teacher/course/courseExamine.vue'], resolve)
+    },
+    { //教师 —— 个人信息
+      path: '/myInfo',
+      component: (resolve) => require(['../views/teacher/teacherInfo.vue'], resolve)
+    },
+    { //教师 —— 评价管理
+      path: '/comments_list',
+      component: (resolve) => require(['../views/teacher/commentList.vue'], resolve)
     }
   ]
 })

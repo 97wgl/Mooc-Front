@@ -66,7 +66,7 @@
             </a>
           </div>
           <div class="clearfix">
-            <a v-for="n in 4" href="javascript:void(0)" :key="n">
+            <a v-for="n in 4":key="n" href="javascript:void(0)">
               <div v-bind:class="{'course-card-container':1,'course-card-last':n==4}">
                 <div class="course-card-top green-bg">
                   <span> Java </span>
@@ -88,10 +88,10 @@
       <!--名校讲师-start -->
       <div class="types-block clearfix">
         <h3 class="types-title">名校讲师</h3>
-        <div v-for='(item,index) in recomdTeacherList' :key="index">
+        <div v-for='(item,index) in recomdTeacherList':key="index">
           <div v-bind:class="{'lecturer-card-container':1,'course-card-last':index==4}">
             <div class="lecturer-item">
-              <img class="lecturer-uimg" src="../../static/images/header.jpg">
+              <img :src="baseUrl+item.headImg" class="lecturer-uimg" >
               <span class="lecturer-name">{{item.name}}</span>
               <span class="lecturer-title">{{item.orgnization}}</span>
               <span class="lecturer-p"> {{item.position}} {{item.remark}} </span>
@@ -150,7 +150,7 @@ export default {
     getLevel(){
       return function(level){
         if(level == "1") return "初级";
-        else if(level == "1") return "中级";
+        else if(level == "2") return "中级";
         else return "高级"
       }
     }

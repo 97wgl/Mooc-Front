@@ -152,7 +152,8 @@ a:focus {
   color: #FFF;
   border-radius: 4px;
   height: 34px;
-  border: 0
+  border: 0;
+  cursor: pointer;
 }
 
 .btn:hover {
@@ -1175,6 +1176,19 @@ a:focus {
   /* 	background-color: #F3F5F7; */
   display: inline-block;
   float: left;
+}
+
+.oc-form li .radioLabel{
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  float: inherit;
+}
+
+.oc-form li .input-radio{
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
 }
 
 .oc-form li .display-text {
