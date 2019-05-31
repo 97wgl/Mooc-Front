@@ -6,23 +6,19 @@
         <div class="course-info">
           <div class="course-title"> {{course.name}} </div>
 
-          <div class="course-meta">
-
-            <div v-if="!session_username || !curCourseSection">
-              <div v-for="(section, index) in chaptSections" :key="index">
-                <div v-if="index == 0">
-                  <a href="javascript:void(0)" class="learn-btn" onClick="playVideo(section.id)">开始学习</a>
-                </div>
-              </div>
+          <div class="course-meta" style="display: flex; height: 50px;">
+            <!-- 未登录 -->
+            <div v-if="!isLogina || !isStudy" style="padding-top: 25px;"> 
+              <a href="javascript:void(0)" class="learn-btn" @click="playVideo(sectionList[0])">开始学习</a>
             </div>
-
-            <div v-if="session_username &&curCourseSection.length">
+            <!-- 上次学到 -->
+            <!-- <div v-if="session_username &&curCourseSection.length">
               <a href="javascript:void(0)" class="learn-btn" onClick="playVideo(curCourseSection.id);">继续学习</a>
               <div class="static-item">
                 <div class="meta">上次学到</div>
                 <div class="meta-value"> {{curCourseSection.name}} </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="static-item">
               <div class="meta">学习人数</div>
@@ -58,7 +54,7 @@
             <a @click="isComment = 'yes'" style="cursor: pointer">
               <span :class="{ 'menu-item': true, 'cur': isComment == 'yes'}">评论</span>
             </a>
-            <input type="button" value="添加评价" class="btn" style="height: 30px;" @click="showModal">
+            <input type="button" value="添加评价" :class="{'btn': true, 'bggray': commented}" @click="showModal" :disabled="commented">
           </div>
 
         </div>
@@ -66,25 +62,24 @@
 
         <!-- 课程章节 - start -->
         <div id="courseSection" v-if="isComment == 'no'">
-          课程
-          <div v-if="!chaptSections">
-            <div v-for="(chaptSection, index) in chaptSections" :key="index">
+          <div>
+            <div v-for="(section, index) in sectionList" :key="index">
               <div class="chapter">
                 <a href="javascript:void(0);" class="js-open">
                   <h3>
                     <strong>
                       <div class="icon-chapter">=</div>
-                        {{chaptSection.name}} </strong>
+                        {{section.name}} </strong>
                     <span class="drop-down">▼</span>
                   </h3>
                 </a>
 
-                <ul class="chapter-sub">
-                  <div v-if="!chaptSection.sections">
-                    <div v-for="(section, index) in chaptSection.sections" :key="index">
-                      <a @click="playVideo(section.id)">
+                <ul class="chapter-sub" style="margin-top: 20px;">
+                  <div>
+                    <div v-for="(jie, index) in section.children" :key="index">
+                      <a @click="playVideo(jie)">
                         <li class="chapter-sub-li">
-                          <i class="icon-video">▶</i> {{section.name}} ({{section.time}})
+                          <i class="icon-video">▶</i> {{jie.name}}
                         </li>
                       </a>
                     </div>
@@ -104,13 +99,28 @@
               <img class="lecturer-uimg" src="http://111.230.240.26:8080/yourmooc/resources/images/header.jpg">
             </div>
             <div class="comment-main">
-              <div class="user-name">
-                <span>{{item.userName}}</span>
+              <div class="user-name" style="margin-bottom: 20px;">
+                <span>{{item.username}}</span>
               </div>
               <div class="comment-conetnt">{{item.content}}</div>
               <div class="comment-footer">
                 <span>{{item.time}}</span>
                 <a>{{item.courseName}}</a>
+              </div>
+            </div>
+            <div class="comment clearfix" style="padding-top: 20px; padding-left: 10px; border: 0; background: #d3d3d314;" v-if="item.isReply == 1">
+              <!-- <div class="comment-header" style="width: 40px;">
+                <img class="lecturer-uimg" src="http://111.230.240.26:8080/yourmooc/resources/images/header.jpg">
+              </div> -->
+              <div class="comment-main" style="padding-left: 10px;">
+                <div class="user-name" style="margin-bottom: 20px;">
+                  <span>{{item.teacherName}} 回复道：</span>
+                </div>
+                <div class="comment-conetnt">{{item.replyContent}}</div>
+                <div class="comment-footer">
+                  <span>{{item.replyTime}}</span>
+                  <a>{{item.courseName}}</a>
+                </div>
               </div>
             </div>
           </div>
@@ -124,16 +134,16 @@
         <div v-if="!courseTeacher.username">
           <div class="lecturer-item" style="width: 100%;">
             <img class="lecturer-uimg" src="../../static/images/header.jpg">
-            <span class="lecturer-name"> {{courseTeacher.username}} </span>
-            <span class="lecturer-title"> {{courseTeacher.collegeName}} </span>
-            <span class="lecturer-p"> {{courseTeacher.title}}，{{courseTeacher.sign}} </span>
+            <span class="lecturer-name"> {{courseTeacher.name}} </span>
+            <span class="lecturer-title"> {{courseTeacher.orgnization}} </span>
+            <span class="lecturer-p"> {{courseTeacher.position}}，{{courseTeacher.remark}} </span>
           </div>
         </div>
       </div>
       <!-- 教师信息 - end -->
 
       <!-- 评价模态框 -->
-      <div class="modal clearfix" v-if="isShowModal">
+      <!-- <div class="modal clearfix" v-if="isShowModal">
         <div class="starts" style="display: flex;">
           <label>打分：</label>
           <div style="display: flex;">
@@ -149,36 +159,42 @@
         <div style="float: right; margin: 20px 0px;">
           <input type="button" value="提交评价" class="btn" style="height: 30px;" @click="submitComment">
         </div>
-      </div>
+      </div> -->
       
     </div>
-    <div class="mask" v-if="isShowModal" @click="submitComment"></div>
+    <!-- <div class="mask" v-if="isShowModal" @click="isShowModal = !isShowModal"></div> -->
+    <Modal
+      v-model="isShowModal"
+      title="提交评价"
+      @on-ok="submitComment">
+      <div class="starts" style="display: flex;">
+        <label>打分：</label>
+        <div style="display: flex;">
+          <div class="starXin" v-for="(item,index) in stars" :key='index' style="margin-right: 5px;">
+            <img :src="item.type ? stara : starb " style="width: 20px; height: 20px;" @click="clickStar(item)"/>
+          </div>
+        </div>
+      </div>
+      <div style="position: relative; margin-top: 20px;">
+        <span style="position: absolute;">评价内容：</span>
+        <textarea rows="5" cols="30" style="margin-left: 80px;" v-model="comment"></textarea>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      course: {
-        name: '',
-        studyCount: 5,
-        level: 1,
-        time: '',
-        score: '',
-        brief: '',
-        id: 1
+      course: { // 课程详情
+        id: 1 
       },
-      courseTeacher: {
+      courseTeacher: { // 教师信息
         username: '',
-        collegeName: '',
-        title: '',
-        sign: '',
       },
-      curCourseSection: {},
-      session_username: '',
+      curCourseSection: {}, // 用户学习的当前章节
       isComment: 'no', // 默认展示章节
-      chaptSections: [],
-      commentList: [],
+      commentList: [], // 评价列表
       stars:[{
         type: false
       },{
@@ -192,14 +208,25 @@ export default {
       }],
       stara: '../../static/images/followed.png',
       starb: '../../static/images/following.png',
-      isShowModal: false,
-      comment: ''
+      isShowModal: false, // 是否显示模态框
+      comment: '', // 评价内容
+      commented: false, // 是否评价过
+      sectionList: [], // 章节列表
+      // nodesData: [],
+      isStudy: false,
+      isLogina: false,
     }
   },
   created() {
     this.course.id = this.$route.params.id
     this.getCourseDetail()
     this.getAllCommentList()
+    this.getCommentStatus() // 查看评价状态
+    if(this.isLogin()) { // 登录了
+      this.isStudy = this.getStudyList()
+      console.log('登录了')
+    }
+    this.isLogina = this.isLogin() 
   },
   filters: {
     numFilter(value) {
@@ -207,38 +234,95 @@ export default {
     }
   },
   methods: {
-    getCourseDetail() {
+    // 获取学习记录
+    getStudyList() {
+      let user = JSON.parse(sessionStorage.getItem('Authorization'))
+      this.$http({
+        method: 'get',
+        url: this.baseUrl + `study-record/list?userId=${user.id}&courseId=${this.course.id}`
+      }).then(res => {
+        if(res.data.code == 0) {
+          return true // 有学习
+        }else {
+          return false
+        }
+      })
+    },
+    getCourseDetail() { // 获取课程详情
       this.$http.get(this.baseUrl + `course/detail?courseId=${this.course.id}`).then(res => {
         let data = res.data.data
         this.course = res.data.data
+        this.getTeacherDetail(res.data.data.teaId)
+        this.getAllSectionList()
       })
     },
-    getAllCommentList() {
+    getAllCommentList() { // 获取所有的评论
       this.$http.get(this.baseUrl + `course-evaluation?course_id=${this.course.id}&page=1&limit=20`).then(res => {
         this.commentList = res.data.data
       })
     },
+    getTeacherDetail(id) { // 获取教师详情
+      // 根据teaId获取teacher信息
+      this.$http({
+        method: 'get',
+        url: this.baseUrl + `teacher/info?teacherId=${id}`
+      }).then(res => {
+        this.courseTeacher = res.data.data
+      })
+    },
+    getAllSectionList() { // 获取所有的章节
+      this.$http({
+        method: 'get',
+        url: this.baseUrl + `course-section/list?courseId=${this.$route.params.id}`
+      }).then(res => {
+        this.sectionList = this.toTreeData(res.data.data)
+      })
+    },
+    getCommentStatus() {
+      if(sessionStorage.getItem('Authorization')) {
+        let user = JSON.parse(sessionStorage.getItem('Authorization'))
+        this.$http({
+          method: 'get',
+          url: this.baseUrl + `course-evaluation/status?uId=${user.id}&courseId=${this.$route.params.id}`
+        }).then(res => {
+          // 没评价给0 评价了给-1
+          if(res.data.code == 0) {
+            this.commented = false
+          }else {
+            this.commented = true
+          }
+        })
+      }
+    },
     showModal() {
-      this.isShowModal = true
+      if (!this.isLogin()) { // 没有登录则跳转到登录界面
+        this.$router.push('/login')
+      } else {
+        this.isShowModal = true
+      }
     },
     clickStar(item){
       item.type = !item.type
     },
     submitComment() {
+      if(!this.comment || !this.score) return // 非空判断 
       let postData = {
-        // u_id: sessionStorage.getItem(''),
-        course_id: this.course.id, 
+        u_id: JSON.parse(sessionStorage.getItem('Authorization')).id,
+        course_id: this.$route.params.id, 
         content: this.comment,
         score: this.stars.filter(item => item.type).length
       }
       this.$http({
         method: 'post',
         url: this.baseUrl + 'course-evaluation',
-        data: postData
+        data: this.transformRequest(postData)
       }).then(res => {
         if(res.data.code == 0) {
           this.$Message.success('评价成功')
           this.isShowModal = !this.isShowModal
+          this.getAllCommentList()
+          // 请求该用户是否已经评论该课程
+          this.getCommentStatus()
         }else {
           this.$Message.success('评价失败')
         }
@@ -247,35 +331,28 @@ export default {
     /**
 	 * 播放视频之前进行登录判断
    */
-    playVideo( id) {
-      if (!isLogin()) { // 没有登录则跳转到登录界面
+    playVideo(id) {
+      if (!this.isLogin()) { // 没有登录则跳转到登录界面
         this.$router.push('/login')
-      } else {
-        location.href = "<%=path %>/course/video/" + id;
-        this.$router.push('/')
+      } else { // 点击跳转到视频详情页时，暂存视频信息
+        this.$router.push(`/sections_detail/${id.sectionId}`)
       }
     },
-    /**
-     * 判断是否登录
-     */
-    isLogin() {
-      var session_username = '${session_username}'; // session_storage 登录注册的时候获取到session存在浏览器中
-      if (!session_username) {
-        return false;
-      }
-      return true;
-    }
+    
   }
 }
 </script>
 <style>
+  .bggray {
+    background: lightgray;
+  }
   .modal {
     width: 400px;
     height: 260px;
     background: #ffffff;;
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 10%;
     transform: translate(-50%, -50%);
     z-index: 2;
     border-radius: 4px;
@@ -284,7 +361,7 @@ export default {
   }
   .mask {
     width: 100%;
-    height: 100%;
+    height: 2000px;
     position: absolute;
     left: 0;
     right: 0;

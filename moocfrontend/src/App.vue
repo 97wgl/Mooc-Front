@@ -8,12 +8,13 @@
           <span class="header-nav-item" @click="$router.push('/course_list')">分类</span>
           <span class="header-nav-item" @click="$router.push('/myInfo')">我的</span>
           <span class="header-nav-item" @click="$router.push('/teacher_login')">我是老师</span>
+          <span class="header-nav-item" @click="$router.push('/my_information')">我的通知</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'teacher'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/comments_list')">评价管理</span>
           <span class="header-nav-item" @click="$router.push('/message_list')">留言管理</span>
-          <span class="header-nav-item" @click="$router.push('/myInfo')">个人信息管理</span>
+          <span class="header-nav-item" @click="$router.push('/my_information')">个人信息管理</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'admin'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>

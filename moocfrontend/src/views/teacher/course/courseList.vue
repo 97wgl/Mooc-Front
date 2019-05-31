@@ -9,65 +9,11 @@
       Table(:columns="columns", :data="courseList", size="small", style="margin-top: 20px;", ref="selection", @on-selection-change="handleSelectRow()")
 </template>
 <script>
+import moment from 'moment'
 export default {
   data() {
     return {
-      courseList:[
-        {
-          id: 1,
-          name: 'aaa',
-          classify_id: 'aaa',
-          level: 'aaa',
-          brief: 'aaa',
-          publish_time: 'aaa',
-          status: 0
-        },
-        {
-          id: 1,
-          name: 'aaa',
-          classify_id: 'aaa',
-          level: 'aaa',
-          brief: 'aaa',
-          publish_time: 'aaa',
-          status: 0
-        },
-        {
-          id: 1,
-          name: 'aaa',
-          classify_id: 'aaa',
-          level: 'aaa',
-          brief: 'aaa',
-          publish_time: 'aaa',
-          status: 0
-        },
-        {
-          id: 1,
-          name: 'aaa',
-          classify_id: 'aaa',
-          level: 'aaa',
-          brief: 'aaa',
-          publish_time: 'aaa',
-          status: 0
-        },
-        {
-          id: 1,
-          name: 'aaa',
-          classify_id: 'aaa',
-          level: 'aaa',
-          brief: 'aaa',
-          publish_time: 'aaa',
-          status: 0
-        },
-        {
-          id: 1,
-          name: 'aaa',
-          classify_id: 'aaa',
-          level: 'aaa',
-          brief: 'aaa',
-          publish_time: 'aaa',
-          status: 0
-        }
-      ],
+      courseList:[],
       columns: [
         {
           type: 'index',
@@ -84,7 +30,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.$router.push(`/course_detail/${params.row.id}`);  // 跳转到健身房详情页
+                    this.$router.push(`/course_detail_tea/${params.row.courseId}/${params.row.status}`); 
                   }
                 }
               }, params.row.name),
@@ -94,13 +40,13 @@ export default {
         {
           title: '课程类别',
           render: (h, params) => {
-            return h('span', params.row.classify_id);
+            return h('span', params.row.classify);
           }
         },
         {
           title: '课程级别',
           render: (h, params) => {
-            return h('span', params.row.level);
+            return h('span', params.row.level == '1' ? '初级' : (params.row.level == '2' ? '中级' : '高级' ) );
           }
         },
         {
@@ -112,59 +58,125 @@ export default {
         {
           title: '课程发布时间',
           render: (h, params) => {
-            return h('span', params.row.publish_time);
+            return h('span', moment(params.row.publish_time).format('YYYY-MM-DD HH:mm:ss'));
           }
         },
         {
-          title: '课程审核状态',
+          title: '课程审核状态', // 初始 0 1 通过 2 驳回 3 审核中
           render: (h, params) => {
-            return h('span', params.row.status);
-          }
-        },
-        // {
-        //   title: '课程操作',
-        //   render: (h, params) => {
-        //     let status = params.row.status
-        //     let options = []
-        //     if(new Date().getTime() <= moment(params.row.startTime).unix() * 1000) { // 当前时间大于开始时间时可以取消预约
-        //       options.push(h('Button', {
-        //         props: {
-        //           type: 'primary',
-        //           size: 'small'
-        //         },
-        //         on: {
-        //           click: () => {
-        //             this.$Modal.confirm({
-        //               title: '操作确认',
-        //               content: `是否取消预约${moment(params.row.startTime).format('YYYY.MM.DD HH:mm')}-${moment(params.row.endTime).format('YYYY.MM.DD HH:mm')}-${params.row.equipmentName}？`,
-        //                 onOk: () => {
-        //                   this.cancelReservation(params.row.id, params.row.arrangeId)
-                          
-        //                 },
-        //                 onCancel: () => {
-        //                 }
-        //             });
-        //           }
-        //         }
-        //       }, '取消预约'))
-        //     }
-        //     return h('div', options) 
-        //   }
-          
-        // },
+            let status = params.row.status
+            let options = []
+            if (status == 3) { //未提交审核
+              options.push(h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.$Modal.confirm({
+                      title: '操作确认',
+                      content: `是否将课程${params.row.name}提交管理员审核？`,
+                        onOk: () => {
+                          this.updataStatus(params.row.id, 0);  // 将未提交变为审核中
+                        },
+                        onCancel: () => {
+                        }
+                    });
+                  }
+                }
+              }, '提交审核'))
+            }else if(status == 0) {
+              options.push(h('Tag', {
+                props: {
+                  type: 'border',
+                  size: 'small',
+                  color: 'warning'
+                },
+                style: {
+                  marginRight: '5px',
+                },
+                
+              }, '审核中'))
+            }else if(status == 1) {
+              options.push(h('Tag', {
+                props: {
+                  type: 'border',
+                  size: 'small',
+                  color: 'success'
+                },
+                style: {
+                  marginRight: '5px',
+                },
+                
+              }, '审核通过'))
+            }else if(status == 2) {
+              options.push(h('Tag', {
+                props: {
+                  type: 'border',
+                  size: 'small',
+                  color: 'error'
+                },
+                style: {
+                  marginRight: '5px',
+                },
+                
+              }, '被驳回'))
+              options.push(h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.$Modal.confirm({
+                      title: '操作确认',
+                      content: `是否将课程${params.row.name}提交管理员审核？`,
+                        onOk: () => {
+                          this.updataStatus(params.row.id, 0);  // 将未提交变为审核中
+                        },
+                        onCancel: () => {
+                        }
+                    });
+                  }
+                }
+              }, '提交审核'))
+            }
+            return h('div', options)
+          },
+        }
       ],
     }
   },
   created() {
-
+    this.getAllCourseList()
   },
-  methods: {
+  methods: { // todo 审核通过的课程不允许再添加 章和节  // 审核中的课程也不允许添加章和节
+    updateStatus() {
+
+    },
     handleSelectRow(selection, index) {
       if(this.$refs.selection.getSelection().length > 5) {
         this.$Message.error('只能选择最多5张课程封面');
         return  
       }
     },
+    // 获取教师课程列表
+    getAllCourseList() {
+      let user = JSON.parse(sessionStorage.getItem('Authorization'))
+      this.$http({
+        method: 'get',
+        url: this.baseUrl + `teacher/course?teacherId=${user.id}` 
+      }).then(res => {
+        this.courseList = res.data.data
+      })
+    }
   }
 }
 </script>
