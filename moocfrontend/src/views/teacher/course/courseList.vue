@@ -81,7 +81,7 @@ export default {
                       title: '操作确认',
                       content: `是否将课程${params.row.name}提交管理员审核？`,
                         onOk: () => {
-                          this.updataStatus(params.row.id, 0);  // 将未提交变为审核中
+                          this.updateStatus(params.row.courseId);  // 将未提交变为审核中
                         },
                         onCancel: () => {
                         }
@@ -139,7 +139,7 @@ export default {
                       title: '操作确认',
                       content: `是否将课程${params.row.name}提交管理员审核？`,
                         onOk: () => {
-                          this.updataStatus(params.row.id, 0);  // 将未提交变为审核中
+                          this.updateStatus(params.row.id, 0);  // 将未提交变为审核中
                         },
                         onCancel: () => {
                         }
@@ -157,9 +157,17 @@ export default {
   created() {
     this.getAllCourseList()
   },
-  methods: { // todo 审核通过的课程不允许再添加 章和节  // 审核中的课程也不允许添加章和节
-    updateStatus() {
-
+  methods: { 
+    updateStatus(courseId) {
+      this.$http({
+        method: 'put',
+        url: this.baseUrl + `teacher/submit?courseId=${courseId}`
+      }).then(res => {
+        if(res.data.code == 0) {
+          this.$Message.success('审核提交成功！')
+          this.getAllCourseList()
+        }
+      })
     },
     handleSelectRow(selection, index) {
       if(this.$refs.selection.getSelection().length > 5) {

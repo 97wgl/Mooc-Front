@@ -1,5 +1,5 @@
 <template lang="jade">
-  div(class='myInformation')
+  div(class='myInformation' style="padding-left: 200px;")
     h2 我的通知
     div(style="padding: 20px 50px;")
       Tabs(value="comment" on-click="switchTab")

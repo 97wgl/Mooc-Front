@@ -8,17 +8,17 @@
 
           <div class="course-meta" style="display: flex; height: 50px;">
             <!-- 未登录 -->
-            <div v-if="!isLogina || !isStudy" style="padding-top: 25px;"> 
+            <div v-if="!isLogina || isStudy.length == 0" style="padding-top: 25px;"> 
               <a href="javascript:void(0)" class="learn-btn" @click="playVideo(sectionList[0])">开始学习</a>
             </div>
             <!-- 上次学到 -->
-            <!-- <div v-if="session_username &&curCourseSection.length">
-              <a href="javascript:void(0)" class="learn-btn" onClick="playVideo(curCourseSection.id);">继续学习</a>
+            <div v-if="isLogina && isStudy.length" style="display: flex;">
+              <a style="margin-top: 20px;" href="javascript:void(0)" class="learn-btn" @click="playVideo(isStudy[0].sectionId);">继续学习</a>
               <div class="static-item">
                 <div class="meta">上次学到</div>
-                <div class="meta-value"> {{curCourseSection.name}} </div>
+                <div class="meta-value"> {{isStudy[0].sectionName}} </div>
               </div>
-            </div> -->
+            </div>
 
             <div class="static-item">
               <div class="meta">学习人数</div>
@@ -54,7 +54,7 @@
             <a @click="isComment = 'yes'" style="cursor: pointer">
               <span :class="{ 'menu-item': true, 'cur': isComment == 'yes'}">评论</span>
             </a>
-            <input type="button" value="添加评价" :class="{'btn': true, 'bggray': commented}" @click="showModal" :disabled="commented">
+            <input type="button" :value=" commented ? '已评价' : '添加评价'" :class="{'btn': true, 'bggray': commented}" @click="showModal" :disabled="commented">
           </div>
 
         </div>
@@ -187,7 +187,12 @@ export default {
   data() {
     return {
       course: { // 课程详情
-        id: 1 
+        id: 1,
+        name:'',
+        level: '',
+        time: '',
+        score: 0,
+        brief: ''
       },
       courseTeacher: { // 教师信息
         username: '',
@@ -213,20 +218,17 @@ export default {
       commented: false, // 是否评价过
       sectionList: [], // 章节列表
       // nodesData: [],
-      isStudy: false,
+      isStudy: [],
       isLogina: false,
     }
   },
   created() {
     this.course.id = this.$route.params.id
-    this.getCourseDetail()
-    this.getAllCommentList()
+    this.getCourseDetail() // 课程详情页
+    this.getAllCommentList() // 评论页
     this.getCommentStatus() // 查看评价状态
-    if(this.isLogin()) { // 登录了
-      this.isStudy = this.getStudyList()
-      console.log('登录了')
-    }
     this.isLogina = this.isLogin() 
+    this.getStudyList() // 获取学习记录
   },
   filters: {
     numFilter(value) {
@@ -242,9 +244,9 @@ export default {
         url: this.baseUrl + `study-record/list?userId=${user.id}&courseId=${this.course.id}`
       }).then(res => {
         if(res.data.code == 0) {
-          return true // 有学习
+          this.isStudy = res.data.data // 有学习
         }else {
-          return false
+          this.isStudy = []
         }
       })
     },

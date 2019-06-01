@@ -64,15 +64,8 @@ export default new Router({
   
       },
       component: (resolve) => require(['../views/teacher/messageList/messageList.vue'], resolve)
-    },
-    {
-      path: '/my_information',
-      name: 'my_information',
-      meta: {
-
-      },
-      component: (resolve) => require(['../views/myInformation.vue'], resolve)
-    },{
+    }
+    ,{
       path: '/list',
       component: (resolve) => require(['../views/list.vue'], resolve)
     },
@@ -91,6 +84,10 @@ export default new Router({
         {
             path: '/modifyPassword',
             component: resolve => require(['../components/modifyPassword.vue'], resolve)
+        },
+        {
+          path: '/my_information',
+          component: resolve => require(['../components/myInformation.vue'], resolve)
         }
       ]
     },

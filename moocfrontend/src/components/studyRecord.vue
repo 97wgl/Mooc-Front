@@ -3,19 +3,19 @@
 		<div><span class="f-16">最近学习</span></div>
 		<div class="split-line" style="margin: 20px 0px;"></div>
     <div v-if="nullMsg" class="nullDiv">{{nullMsg}}</div>
-		<div v-for="item in recentCourseList">
+		<div v-for="(item, index) in recentCourseList" :key="index">
       <div class="comment clearfix">
         <div class="comment-main" style="width: 100%">
-          <a href="javascript:void(0)" class="user-name link-a" style="font-size:20px;">{{item.className}}</a>
+          <a @click="jumpToCourse(item.courseId)" class="user-name link-a" style="font-size:20px;">{{item.courseName}}</a>
           <div class="comment-content">
             <span>
-              <a href="javascript:void(0)">{{item.sectionName}}</a>
+              <a @click="jumpToSection(item.sectionId)">{{item.sectionName}}</a>
             </span>
 					</div>
           <div class="comment-footer">
             <span>时间：{{item.latesTime}}</span>
             <a href="javascript:void(0)">
-              <span class="continue-btn" style="margin-left: 600px;border-radius: 25px;">继续学习</span>
+              <span class="continue-btn" style="margin-left: 600px;border-radius: 25px;" @click="jumpToSection(item.sectionId)">继续学习</span>
 						</a>
           </div>
         </div>
@@ -30,37 +30,31 @@ export default {
     return {
       userId: '',
       nullMsg: '',
-      recentCourseList: [
-        {
-          className:'带您完成神秘的涟漪按钮效果-入门篇',
-          sectionName: '1-1 使用RecyclerView优雅实现复杂布局-课程介绍',
-          latesTime: '2019-05-31 13:02:25'
-        },
-        {
-          className:'带您完成神秘的涟漪按钮效果-入门篇',
-          sectionName: '1-1 使用RecyclerView优雅实现复杂布局-课程介绍',
-          latesTime: '2019-05-31 13:02:25'
-        }
-      ]
+      recentCourseList: []
     }
   },
   created() {
     let userInfo = JSON.parse(sessionStorage.getItem('Authorization'));
-    this.userId = userInfo.id;
     this.$http({
       method: 'get',
-      url: this.baseUrl+'study-record/list?'+this.transformRequest({
-        'userId': '1'
-      })
+      url: this.baseUrl + `study-record/list?userId=${userInfo.id}`
     }).then(res=>{
       let data = res.data;
       if(data.code == -1){
         this.nullMsg = data.msg;
       }else if(data.code == 0){
-        // this.recentCourseList = data.data.concat();
+        this.recentCourseList = res.data.data;
       }
     })
   },
+  methods: {
+    jumpToSection(sectionId) {
+      this.$router.push(`/sections_detail/${sectionId}`)
+    },
+    jumpToCourse(courseId) {
+      this.$router.push(`/course_detail/${courseId}`)
+    }
+  }
 }
 </script>
 

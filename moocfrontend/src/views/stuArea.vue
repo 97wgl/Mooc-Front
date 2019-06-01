@@ -6,8 +6,8 @@
         <div class="split-line" style="margin-bottom: 20px;"></div>
         <ul class="user-menu-nav-block">
           <a href="javascript:void(0)">
-            <li v-for="(item,index) in items":key="index" v-bind:class="{'user-menu-nav-cur':item.isActive,'user-menu-nav':!item.isActive}"
-             @click="switchTab(item.index,index)">
+            <li v-for="(item,index) in items" :key="index" v-bind:class="{'user-menu-nav-cur':item.isActive,'user-menu-nav':!item.isActive}"
+             @click="switchTab(item.index, index)">
               {{ item.title }}<span style="color: rgb(119, 119, 119);">&gt;</span>
             </li>
           </a>
@@ -27,7 +27,8 @@ export default {
       items:[
         {title: "学习记录",index: "myArea",isActive:1},
         {title: "个人信息",index: "userInfo",isActive:0},
-        {title: "修改密码",index: "modifyPassword",isActive:0}
+        {title: "修改密码",index: "modifyPassword",isActive:0},
+        {title: "我的消息",index: "my_information",isActive:0}
       ]
     }
   },

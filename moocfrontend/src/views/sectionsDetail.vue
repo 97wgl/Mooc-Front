@@ -150,7 +150,7 @@ export default {
         data: this.transformRequest(postData)
       }).then(res => {
         if(res.data.code == 0) {
-          this.$Message.success('生成学习记录')
+          console.log('学习记录', res.data.data)
         }
         
       })

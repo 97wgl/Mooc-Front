@@ -41,14 +41,15 @@ export default {
       depart: '',
       position: '',
       temp: [],
-      applyMaterial: []
+      applyMaterial: [],
+      file: ''
     }
   },
   methods: {
     show () {
       this.depart = '';
       this.position = '';
-      this.temp= [];
+      // this.temp= [];
       this.applyMaterial = [];
       this.isShowConfirm = true;
     },
@@ -61,12 +62,12 @@ export default {
     addFile(){
       let inputDOM = this.$refs.inputer;
       // 通过DOM取文件数据
-      this.temp = inputDOM.files;
-      for(let key in this.temp){
-        if(!Number.isNaN(parseInt(key))){
-          this.applyMaterial.push(this.temp[key]);
-        }
-      }
+      this.file = inputDOM.files;
+      // for(let key in this.temp){
+      //   if(!Number.isNaN(parseInt(key))){
+      //     this.applyMaterial.push(this.temp[key]);
+      //   }
+      // }
     },
     clickRegister(){
       var $errorMsg = $('#errorMsg');
@@ -88,7 +89,9 @@ export default {
       formData.append('userId', this.userId);
       formData.append('position', this.position);
       formData.append('organization', this.depart);
-      formData.append('applyMaterial', this.applyMaterial); 
+      for(let i =0; i<this.file.length; i++) {
+        formData.append('applyMaterial', this.file[i]);
+      } 
       this.$http({
         method: 'post',
         url: this.baseUrl +'user/apply',
