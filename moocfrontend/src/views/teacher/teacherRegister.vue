@@ -15,6 +15,7 @@
           <li>
             <label>证明材料</label>
             <input type="file" multiple @change="addFile" ref="inputer">
+           <!-- <input type="file" @change="addFile" ref="inputer"> -->
           </li>
         </form>
         <li id="errorMsg" class="clearfix" style="display:none;color:red;margin-left:190px;"></li>
@@ -40,8 +41,8 @@ export default {
       userId: '',
       depart: '',
       position: '',
-      temp: [],
-      applyMaterial: []
+      // temp: [],
+      applyMaterial: ''
     }
   },
   methods: {
@@ -61,12 +62,14 @@ export default {
     addFile(){
       let inputDOM = this.$refs.inputer;
       // 通过DOM取文件数据
-      this.temp = inputDOM.files;
-      for(let key in this.temp){
-        if(!Number.isNaN(parseInt(key))){
-          this.applyMaterial.push(this.temp[key]);
-        }
-      }
+      //  this.temp = inputDOM.files[0];
+      // for(let key in this.temp){
+      //   if(!Number.isNaN(parseInt(key))){
+      //     this.applyMaterial.push(this.temp[key]);
+      //   }
+      // }
+      this.applyMaterial = inputDOM.files
+      console.log("applyMaterial", this.applyMaterial);
     },
     clickRegister(){
       var $errorMsg = $('#errorMsg');
@@ -88,12 +91,9 @@ export default {
       formData.append('userId', this.userId);
       formData.append('position', this.position);
       formData.append('organization', this.depart);
-      formData.append('applyMaterial', this.applyMaterial); 
-      this.$http({
-        method: 'post',
-        url: this.baseUrl +'user/apply',
-        data: formData
-      }).then(res => {
+      formData.append('applyMaterial', this.applyMaterial);
+      console.log('formData', this.applyMaterial instanceof Array) 
+      this.$http.post(this.baseUrl +'user/apply', formData).then(res => {
         if(res.data.code == 0) {
           this.$Message.success(res.data.msg);
           this.hidden();
