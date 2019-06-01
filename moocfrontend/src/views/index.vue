@@ -3,8 +3,8 @@
     <div class="f-main">
       <div class="clearfix">
         <swiper :options="swiperOption" class="swiper-wrap"  ref="mySwiper" v-if="goodCourseList.length!=0">
-          <swiper-slide v-for="(item,index) in goodCourseList" :key="index" >
-            <img :src="baseUrl+item.picture" alt="课程" />
+          <swiper-slide v-for="(item,index) in goodCourseList" :key="index" style="cursor: pointer;">
+            <img :src="baseUrl+item.picture" alt="课程"  @click="JumpToCourseDetail(item.courseId)"/>
           </swiper-slide>
           <!-- 小圆点 -->
           <div class="swiper-pagination" v-for="(item,index) in goodCourseList" :key="index" slot="pagination" ></div>
@@ -14,8 +14,8 @@
       <!-- 免费好课-start -->
       <div class="types-block clearfix">
         <h3 class="types-title">好课推荐</h3>
-        <div v-for="(item,index) in goodCourseList":key="index" class="types-content">
-          <a href="javascript:void(0)">
+        <div v-for="(item,index) in goodCourseList" class="types-content" :key="index">
+          <a @click="JumpToCourseDetail(item.courseId)">
             <div v-bind:class="{'course-card-container':1,'course-card-last':index==4}">
               <div v-bind:class="{'course-card-top':1,'brown-bg':index==0,'gray-bg':index==1,'purple-bg':index==2,'pink-bg':index==3,'green-bg':index==4}" >
                 <span>{{item.classify}}</span>
@@ -66,7 +66,7 @@
             </a>
           </div>
           <div class="clearfix">
-            <a v-for="n in 4":key="n" href="javascript:void(0)">
+            <a v-for="n in 4" :key="n" href="javascript:void(0)">
               <div v-bind:class="{'course-card-container':1,'course-card-last':n==4}">
                 <div class="course-card-top green-bg">
                   <span> Java </span>
@@ -88,7 +88,7 @@
       <!--名校讲师-start -->
       <div class="types-block clearfix">
         <h3 class="types-title">名校讲师</h3>
-        <div v-for='(item,index) in recomdTeacherList':key="index">
+        <div v-for='(item,index) in recomdTeacherList' :key="index">
           <div v-bind:class="{'lecturer-card-container':1,'course-card-last':index==4}">
             <div class="lecturer-item">
               <img :src="baseUrl+item.headImg" class="lecturer-uimg" >
@@ -141,7 +141,11 @@ export default {
       }
     };
   },
-  methods: {},
+  methods: {
+    JumpToCourseDetail(courseId) {
+      this.$router.push(`/course_detail/${courseId}`)
+    }
+  },
   computed: {
     getLevel(){
       return function(level){

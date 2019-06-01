@@ -25,14 +25,10 @@
         </form>
       </div>
     </div>
-    <div class="toast" v-if="showModal">
-      <span>{{message}}</span>
-    </div>
   </div>
 </template>
 <script>
 import $ from 'jquery'
-import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -42,11 +38,6 @@ export default {
       message: '',
       showModal: false,
     }
-  },
-  computed: {
-    ...mapState({
-      user: 'user',
-    }),
   },
   methods: {
     doSubmit() {
@@ -78,9 +69,13 @@ export default {
       }).then(res => {
         if(res.data.code == 0) {
           let data = res.data.data
+          this.$store.commit("setUser", {
+            username: data.userInfo,
+            type: data.type,
+            id: data.id
+          })
           this.$Message.success(res.data.msg)
           sessionStorage.setItem('Authorization', JSON.stringify(data));
-          this.$store.commit('setUser', postData);
           this.$router.push('/index')
         }else{
           this.$Message.error(res.data.msg)

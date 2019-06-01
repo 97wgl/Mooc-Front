@@ -28,12 +28,12 @@ export default new Router({
       component: (resolve) => require(['../views/register.vue'], resolve)
     },
     {
-      path: '/course_detail', // 后面需要加参数
+      path: '/course_detail/:id', // 后面需要加参数
       name: 'course_Detail',
       component: (resolve) => require(['../views/courseDetail.vue'], resolve)
     },
     {
-      path: '/sections_detail',
+      path: '/sections_detail/:sectionId', // 章节详情
       name: 'sections_detail',
       component: (resolve) => require(['../views/sectionsDetail.vue'], resolve)
     },
@@ -53,6 +53,19 @@ export default new Router({
       component: (resolve) => require(['../views/teacher/course/courseCreate.vue'], resolve)
     },
     {
+      path: '/course_detail_tea/:courseId/:status', // 课程详情
+      name: 'course_detail_tea',
+      component: (resolve) => require(['../views/teacher/course/courseDetail.vue'], resolve)
+    },
+    { // 留言列表
+      path: '/message_list',
+      name: 'message_list',
+      meta: {
+  
+      },
+      component: (resolve) => require(['../views/teacher/messageList/messageList.vue'], resolve)
+    }
+    ,{
       path: '/list',
       component: (resolve) => require(['../views/list.vue'], resolve)
     },
@@ -71,6 +84,10 @@ export default new Router({
         {
             path: '/modifyPassword',
             component: resolve => require(['../components/modifyPassword.vue'], resolve)
+        },
+        {
+          path: '/my_information',
+          component: resolve => require(['../components/myInformation.vue'], resolve)
         }
       ]
     },

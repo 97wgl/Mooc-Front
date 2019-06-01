@@ -67,13 +67,16 @@ export default {
       let postData = {
         email: this.email
       }
-      console.log('postData', postData)
       this.$http({
         method: 'post',
         url: this.baseUrl + 'user/regist/valid',
         data: this.transformRequest(postData)
       }).then(res => {
-        console.log('res')
+        if(res.data.code == 0) {
+          this.$Message.success(res.data.msg)
+        }else {
+          this.$Message.error(res.data.msg)
+        }
       })
     },
     doSubmit() { // 注册

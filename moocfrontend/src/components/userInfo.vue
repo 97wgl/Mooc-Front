@@ -7,6 +7,7 @@
         <label for="name">用户名</label>
         <input @focus="handleInput('name')" type="text" id="name" class="input-text" v-model="name">
         <input v-if="isUser" type="button" class="btn" value="成为老师" @click="onRegisterFunc" style="float: right;">
+        <!-- <Tag>标签一</Tag> -->
 			  <teacherRegister ref="showRegister"></teacherRegister>
       </li>
       <li>

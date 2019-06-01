@@ -49,7 +49,7 @@ export default {
     show () {
       this.depart = '';
       this.position = '';
-      this.temp= [];
+      // this.temp= [];
       this.applyMaterial = [];
       this.isShowConfirm = true;
     },
@@ -94,13 +94,22 @@ export default {
       formData.append('applyMaterial', this.applyMaterial);
       console.log('formData', this.applyMaterial instanceof Array) 
       this.$http.post(this.baseUrl +'user/apply', formData).then(res => {
-        if(res.data.code == 0) {
-          this.$Message.success(res.data.msg);
-          this.hidden();
-        }else {
-          this.$Message.error(res.data.msg)
-        }  
-      });
+        for(let i =0; i<this.file.length; i++) {
+          formData.append('applyMaterial', this.file[i]);
+        } 
+        this.$http({
+          method: 'post',
+          url: this.baseUrl +'user/apply',
+          data: formData
+        }).then(res => {
+          if(res.data.code == 0) {
+            this.$Message.success(res.data.msg);
+            this.hidden();
+          }else {
+            this.$Message.error(res.data.msg)
+          }  
+        });
+      })
     },
     handleInput(field) {
       var $errorMsg = $('#errorMsg');
