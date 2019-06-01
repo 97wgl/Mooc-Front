@@ -5,28 +5,27 @@
         <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
         <nav class="header-nav" v-if="userInfo.type == 'user'">
           <span class="header-nav-item" @click="$router.push('/index')">首页</span>
-          <span class="header-nav-item" @click="$router.push('/course_list')">分类</span>
-          <span class="header-nav-item" @click="$router.push('/myInfo')">我的</span>
-          <span class="header-nav-item" @click="$router.push('/teacher_login')">我是老师</span>
+          <span class="header-nav-item" @click="$router.push('/list')">分类</span>
+          <span class="header-nav-item" @click="$router.push('/myArea')">我的</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'teacher'">
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/comments_list')">评价管理</span>
           <span class="header-nav-item" @click="$router.push('/message_list')">留言管理</span>
-          <span class="header-nav-item" @click="$router.push('/myInfo')">个人信息管理</span>
+          <span class="header-nav-item" @click="$router.push('/my_information')">个人信息管理</span>
         </nav>
         <nav class="header-nav" v-if="userInfo.type == 'admin'">
-          <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
-          <span class="header-nav-item" @click="$router.push('/teacher_list')">教师管理</span>
+          <span class="header-nav-item" @click="$router.push('/course_examine')">课程管理</span>
+          <span class="header-nav-item" @click="$router.push('/teacher_examine')">教师管理</span>
         </nav>
         <nav>
-           <span style="margin-top: 30px;" class="header-nav-item" @click="$router.push('/login')" v-if="!userInfo.userInfo">用户登录</span>
+           <span style="margin-top: 30px;" class="header-nav-item" @click="$router.push('/login')" v-if="!this.$store.state.userInfo.username">用户登录</span>
         </nav>
         <nav>
-          <span class="header-nav-item" style="float: right; margin-top: 30px;" @click="logout" v-if="userInfo.userInfo"> 退出登录 </span>
+          <span class="header-nav-item" style="float: right; margin-top: 30px;" @click="logout" v-if="this.$store.state.userInfo.username"> 退出登录 </span>
         </nav>
         <nav>
-          <span class="header-nav-item" style="float: right; margin-top: 30px;"> {{userInfo.userInfo }}</span>
+          <span class="header-nav-item" style="float: right; margin-top: 30px;"> {{this.$store.state.userInfo.username }}</span>
         </nav>
       </div>
     </div>
@@ -35,20 +34,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   data() {
     return {
       // 用户看得到这个表头
       userInfo: null
     }
-  },
-  computed: {
-    user: {
-      get() {
-        return this.$store.state.user
-      }
-    },
   },
   created() { // 每次刷新页面，执行以下代码
     // 检验进入任何页面之前是否有登录，如果登录了，那么存入Authorization
@@ -60,6 +51,7 @@ export default {
       }
       this.gotoLogin();
      }
+     console.log('userInfo', this.$store.state.userInfo)
   },
   methods: {
     // 跳转到登录界面
@@ -73,6 +65,11 @@ export default {
     // // 注销
     logout() {
       this.gotoLogin();
+        this.$store.commit("setUser", {
+          username: '',
+          type: '',
+          id: ''
+        })
     },
   },
 }

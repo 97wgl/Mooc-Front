@@ -152,7 +152,8 @@ a:focus {
   color: #FFF;
   border-radius: 4px;
   height: 34px;
-  border: 0
+  border: 0;
+  cursor: pointer;
 }
 
 .btn:hover {
@@ -620,6 +621,31 @@ a:focus {
   margin-right: 20px;
 }
 
+.modal {
+  width: 400px;
+  height: 260px;
+  background: #ffffff;;
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  border-radius: 4px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+.mask {
+  width: 100%;
+  height: 2000px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: black;
+  opacity: 0.3;
+}
+
 .course-card-container-fix {
   width: 224px;
   height: 228px;
@@ -760,7 +786,7 @@ a:focus {
 
 .course-meta .static-item {
   display: inline-block;
-  padding: 0 33px;
+  padding: 0 20px;
   font-size: 12px;
   border-right: 1px solid #d9dde1;
 }
@@ -824,7 +850,7 @@ a:focus {
 }
 
 .chapter {
-  padding: 0px 10px 20px 10px;
+  padding: 20px 10px 20px 10px;
   border-bottom: 1px solid #eee;
 }
 
@@ -1150,6 +1176,19 @@ a:focus {
   /* 	background-color: #F3F5F7; */
   display: inline-block;
   float: left;
+}
+
+.oc-form li .radioLabel{
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  float: inherit;
+}
+
+.oc-form li .input-radio{
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
 }
 
 .oc-form li .display-text {

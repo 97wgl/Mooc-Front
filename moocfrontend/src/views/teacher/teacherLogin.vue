@@ -57,7 +57,8 @@ export default {
           let data = res.data.data
           this.$Message.success(res.data.msg)
           sessionStorage.setItem('Authorization', JSON.stringify(data));
-          this.$router.push('/course_list')
+          var route = type == 'teacher' ? '/course_list' : '/course_examine';
+          this.$router.push(route);
         }
       })
       
@@ -76,7 +77,7 @@ export default {
   -webkit-transform: translateY(-50%)
   .board
     padding: 40px
-    background: url("https://static1.keepcdn.com/2017/11/08/1510134228332.jpg") no-repeat center center
+    background: url("../../../static/images/c4.jpg") no-repeat center center
     background-size: cover
     overflow: hidden
     position: relative
