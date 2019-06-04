@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     state: {
       userInfo: {
         username: '',   // 登录用户名
-        type: '',        // 角色
+        type: 'user',        // 角色
         id: '' // id
       },
     },

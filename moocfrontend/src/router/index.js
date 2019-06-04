@@ -43,6 +43,11 @@ export default new Router({
       component: (resolve) => require(['../views/teacher/teacherLogin.vue'], resolve)
     }, 
     {
+      path: '/teacher_info', // 教师个人信息管理
+      name: 'teacher_info',
+      component: (resolve) => require(['../views/teacher/teacherInfo.vue'], resolve)
+    }, 
+    {
       path: '/course_list', // 课程列表
       name: 'course_list',
       component: (resolve) => require(['../views/teacher/course/courseList.vue'], resolve)

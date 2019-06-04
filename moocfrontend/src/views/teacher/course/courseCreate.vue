@@ -89,7 +89,7 @@ export default {
           this.$Message.success(res.data.msg)
           this.$router.push('/course_list')
         }else {
-          this.$Message.err(res.data.msg)
+          this.$Message.error(res.data.msg)
         }
       })
       

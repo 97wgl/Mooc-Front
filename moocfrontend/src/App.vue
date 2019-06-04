@@ -3,18 +3,21 @@
     <div class="f-header">
       <div class="f-header-box clearfix">
         <a href="/yourmooc/" class="logo" title="在线教育平台--yourmooc"></a>
-        <nav class="header-nav" v-if="userInfo.type == 'user'">
+        <nav class="header-nav" v-if="this.$store.state.userInfo.type == 'user'">
           <span class="header-nav-item" @click="$router.push('/index')">首页</span>
           <span class="header-nav-item" @click="$router.push('/list')">分类</span>
           <span class="header-nav-item" @click="$router.push('/myArea')">我的</span>
         </nav>
-        <nav class="header-nav" v-if="userInfo.type == 'teacher'">
+        <nav class="header-nav" v-if="this.$store.state.userInfo.type == 'teacher'">
+          <span class="header-nav-item" @click="$router.push('/index')">首页</span>
+          <span class="header-nav-item" @click="$router.push('/list')">分类</span>
+          <span class="header-nav-item" @click="$router.push('/myArea')">我的</span>
           <span class="header-nav-item" @click="$router.push('/course_list')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/comments_list')">评价管理</span>
           <span class="header-nav-item" @click="$router.push('/message_list')">留言管理</span>
-          <span class="header-nav-item" @click="$router.push('/my_information')">个人信息管理</span>
+          <span class="header-nav-item" @click="$router.push('/teacher_info')">个人信息管理</span>
         </nav>
-        <nav class="header-nav" v-if="userInfo.type == 'admin'">
+        <nav class="header-nav" v-if="this.$store.state.userInfo.type == 'admin'">
           <span class="header-nav-item" @click="$router.push('/course_examine')">课程管理</span>
           <span class="header-nav-item" @click="$router.push('/teacher_examine')">教师管理</span>
         </nav>
@@ -45,31 +48,48 @@ export default {
     // 检验进入任何页面之前是否有登录，如果登录了，那么存入Authorization
      if (sessionStorage.getItem('Authorization')) { // 如果登陆了
       this.userInfo = JSON.parse(sessionStorage.getItem('Authorization')); // 拿到登录返回的结果，
+      this.getUserType(this.userInfo.id)
+      this.userInfo = JSON.parse(sessionStorage.getItem('Authorization'))
+      this.$store.commit("setUser", {
+        username: this.userInfo.userInfo,
+        type: this.userInfo.type,
+        id: this.userInfo.id
+      })
+
      }else { // 未登录 默认为用户界面
-      this.userInfo = {
-        type: 'user'
-      }
       this.gotoLogin();
      }
-     console.log('userInfo', this.$store.state.userInfo)
   },
   methods: {
+    getUserType(userId) {
+      this.$http({
+        method: 'get',
+        url: this.baseUrl + `user?u_id=${userId}`
+      }).then(res => {
+        if(res.data.code == 0) {
+          let postData = {
+            userInfo: res.data.data.name,
+            type: res.data.data.isTeacher,
+            id: res.data.data.uId
+          }
+          sessionStorage.setItem('Authorization', JSON.stringify(postData))
+        }
+        
+      })
+    },
     // 跳转到登录界面
     gotoLogin() {
       sessionStorage.removeItem('Authorization');
-      this.userInfo = {
-        type: 'user'
-      }
+      this.$store.commit("setUser", {
+        username: '',
+        type: 'user',
+        id: ''
+      })
       this.$router.push('/index');
     },
     // // 注销
     logout() {
       this.gotoLogin();
-        this.$store.commit("setUser", {
-          username: '',
-          type: '',
-          id: ''
-        })
     },
   },
 }

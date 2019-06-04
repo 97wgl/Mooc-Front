@@ -13,7 +13,7 @@
             </div>
             <!-- 上次学到 -->
             <div v-if="isLogina && isStudy.length" style="display: flex;">
-              <a style="margin-top: 20px;" href="javascript:void(0)" class="learn-btn" @click="playVideo(isStudy[0].sectionId);">继续学习</a>
+              <a style="margin-top: 20px;" href="javascript:void(0)" class="learn-btn" @click="playVideo(isStudy[0]);">继续学习</a>
               <div class="static-item">
                 <div class="meta">上次学到</div>
                 <div class="meta-value"> {{isStudy[0].sectionName}} </div>
@@ -32,10 +32,10 @@
               </div>
             </div>
 
-            <div class="static-item" style="border:none;">
+            <!-- <div class="static-item" style="border:none;">
               <div class="meta">课程时长</div>
               <div class="meta-value"> {{course.time}} </div>
-            </div>
+            </div> -->
             
             <div class="static-item" style="border:none;">
               <div class="meta">课程评分</div>
@@ -241,7 +241,7 @@ export default {
       let user = JSON.parse(sessionStorage.getItem('Authorization'))
       this.$http({
         method: 'get',
-        url: this.baseUrl + `study-record/list?userId=${user.id}&courseId=${this.course.id}`
+        url: this.baseUrl + `study-record/list?userId=${user.id}&courseId=${this.$route.params.id}`
       }).then(res => {
         if(res.data.code == 0) {
           this.isStudy = res.data.data // 有学习
@@ -251,15 +251,18 @@ export default {
       })
     },
     getCourseDetail() { // 获取课程详情
-      this.$http.get(this.baseUrl + `course/detail?courseId=${this.course.id}`).then(res => {
-        let data = res.data.data
-        this.course = res.data.data
-        this.getTeacherDetail(res.data.data.teaId)
-        this.getAllSectionList()
+      this.$http.get(this.baseUrl + `course/detail?courseId=${this.$route.params.id}`).then(res => {
+        if(res.data.code == 0) {
+          let data = res.data.data
+          this.course = res.data.data
+          this.getTeacherDetail(res.data.data.teaId)
+          this.getAllSectionList()
+        }
+        
       })
     },
     getAllCommentList() { // 获取所有的评论
-      this.$http.get(this.baseUrl + `course-evaluation?course_id=${this.course.id}&page=1&limit=20`).then(res => {
+      this.$http.get(this.baseUrl + `course-evaluation?course_id=${this.$route.params.id}&page=1&limit=20`).then(res => {
         this.commentList = res.data.data
       })
     },
@@ -269,7 +272,10 @@ export default {
         method: 'get',
         url: this.baseUrl + `teacher/info?teacherId=${id}`
       }).then(res => {
-        this.courseTeacher = res.data.data
+        if(res.data.code == 0) {
+          this.courseTeacher = res.data.data
+        }
+        
       })
     },
     getAllSectionList() { // 获取所有的章节
@@ -307,7 +313,9 @@ export default {
       item.type = !item.type
     },
     submitComment() {
-      if(!this.comment || !this.score) return // 非空判断 
+      
+      // if(!this.comment || !this.score) return // 非空判断 
+      console.log('111')
       let postData = {
         u_id: JSON.parse(sessionStorage.getItem('Authorization')).id,
         course_id: this.$route.params.id, 
@@ -337,6 +345,8 @@ export default {
       if (!this.isLogin()) { // 没有登录则跳转到登录界面
         this.$router.push('/login')
       } else { // 点击跳转到视频详情页时，暂存视频信息
+        id.courseId = this.$route.params.id
+        sessionStorage.setItem('video_detail', JSON.stringify(id))
         this.$router.push(`/sections_detail/${id.sectionId}`)
       }
     },

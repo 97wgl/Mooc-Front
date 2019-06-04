@@ -4,7 +4,7 @@ import router from './router'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css'
 import axios from 'axios'
-import {baseUrl, transformRequest, isLogin, toTreeData} from './assets/js/util'
+import {baseUrl, transformRequest, isLogin, toTreeData, baseUrlTwo} from './assets/js/util'
 import store from './store'
 
 Vue.use(iView);
@@ -13,6 +13,7 @@ axios.defaults.withCredentials = true
 Vue.prototype.$http = axios
 
 Vue.prototype.baseUrl = baseUrl
+Vue.prototype.baseUrlTwo = baseUrlTwo
 Vue.prototype.isLogin = isLogin
 // Vue.prototype.$store = store
 Vue.prototype.transformRequest = transformRequest
