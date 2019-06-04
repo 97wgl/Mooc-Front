@@ -107,8 +107,10 @@ export default {
         method: 'get',
         url: this.baseUrl + 'course/list?'+this.transformRequest({'classify':title,'tag':tag})
       }).then(res => {
-        if(res.data && res.data.data){
+        if(res.data.code == 0){
           this.courseList = res.data.data.concat();
+        }else{
+          this.courseList = [];
         }   
       }).catch(error => {
         console.log(error);
@@ -119,9 +121,11 @@ export default {
         method: 'get',
         url: this.baseUrl + 'course/list?'+this.transformRequest({'tag':tag})
       }).then(res=>{
-        if(res.data && res.data.data){
+        if(res.data.code == 0){
           let allCourse = res.data.data.concat();
           this.courseList = allCourse.concat();
+        }else{
+          this.courseList = [];
         }
       }).catch(error => {
         console.log(error);
