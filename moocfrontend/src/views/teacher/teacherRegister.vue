@@ -50,7 +50,7 @@ export default {
       this.depart = '';
       this.position = '';
       // this.temp= [];
-      this.applyMaterial = [];
+      this.applyMaterial = '';
       this.isShowConfirm = true;
     },
     hidden () {
@@ -62,14 +62,7 @@ export default {
     addFile(){
       let inputDOM = this.$refs.inputer;
       // 通过DOM取文件数据
-      //  this.temp = inputDOM.files[0];
-      // for(let key in this.temp){
-      //   if(!Number.isNaN(parseInt(key))){
-      //     this.applyMaterial.push(this.temp[key]);
-      //   }
-      // }
       this.applyMaterial = inputDOM.files
-      console.log("applyMaterial", this.applyMaterial);
     },
     clickRegister(){
       var $errorMsg = $('#errorMsg');
@@ -91,25 +84,22 @@ export default {
       formData.append('userId', this.userId);
       formData.append('position', this.position);
       formData.append('organization', this.depart);
-      formData.append('applyMaterial', this.applyMaterial);
-      console.log('formData', this.applyMaterial instanceof Array) 
-      this.$http.post(this.baseUrl +'user/apply', formData).then(res => {
-        for(let i =0; i<this.file.length; i++) {
-          formData.append('applyMaterial', this.file[i]);
-        } 
+      for(let i =0; i<this.applyMaterial.length; i++) {
+        formData.append('applyMaterial', this.applyMaterial[i]);
+      } 
         this.$http({
           method: 'post',
           url: this.baseUrl +'user/apply',
           data: formData
         }).then(res => {
           if(res.data.code == 0) {
-            this.$Message.success(res.data.msg);
+            this.$Message.success('提交申请成功');
             this.hidden();
           }else {
-            this.$Message.error(res.data.msg)
+            this.$Message.error('提交申请失败')
           }  
         });
-      })
+      
     },
     handleInput(field) {
       var $errorMsg = $('#errorMsg');

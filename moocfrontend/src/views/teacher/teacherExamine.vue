@@ -5,12 +5,22 @@
         h2 教师审核
     div(style="width: 90%; margin: 0 auto;")
       Table(:columns="columns", :data="teacherList", size="small", style="margin-top: 20px;")
+    Modal(
+      v-model="isShowModal"
+      title="查看资料详情"
+      )
+      ul
+        li(v-for="(item, index) in fileList", :key="index")
+          a(:href=`baseUrlTwo + item`) {{item}}
+
 </template>
 <script>
 export default {
   data() {
     return {
       teacherList:[],
+      isShowModal: false,
+      fileList: [],
       columns: [
         {
           type: 'index',
@@ -54,12 +64,28 @@ export default {
           }
         },
         {
+          title: '审核资料',
+          // render: (h, params) => {
+          //   return h('span', params.row.email?params.row.email:'');
+          // }
+          render: (h, params) => {
+            return h('button',{
+                  class: 'ivu-btn ivu-btn-primary',
+                  on: {
+                    click: ()=>{
+                      this.checkFile(params.row.applicationMaterial);
+                    }
+                  }
+                },'查看资料')
+          }
+        },
+        {
           title: '教师审核',
           render: (h, params) => {
             if(params.row.status == '2'){
               return h('div', [
                 h('button',{
-                  class: 'ivu-btn ivu-btn-success',
+                  class: 'ivu-btn ivu-btn-success ivu-btn-small',
                   on: {
                     click: ()=>{
                       this.examineOpe(params.row.teaId,1);
@@ -68,7 +94,7 @@ export default {
                 },'通过'),
                 h('button',{
                   style: 'margin-left:10px',
-                  class: 'ivu-btn ivu-btn-error',
+                  class: 'ivu-btn ivu-btn-error ivu-btn-small',
                   on: {
                     click: ()=>{
                       this.examineOpe(params.row.teaId,0);
@@ -88,6 +114,11 @@ export default {
     this.getTeacherData();
   },
   methods: {
+    checkFile(files) {
+      this.isShowModal = true
+      this.fileList = files.split(';')
+      console.log('this.fileList', this.fileList)
+    },
     getTeacherData(){ //获取列表信息
       this.$http({
         method: 'get',

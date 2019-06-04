@@ -6,7 +6,7 @@
       Col(span="4")
         Button(type="primary", style="margin-top: 20px;", @click="$router.push('course_create')") +添加课程
     div(style="width: 90%; margin: 0 auto;")
-      Table(:columns="columns", :data="courseList", size="small", style="margin-top: 20px;", ref="selection", @on-selection-change="handleSelectRow()")
+      Table(:columns="columns", :data="courseList", size="small" ,style="margin-top: 20px;", ref="selection", @on-selection-change="handleSelectRow()")
 </template>
 <script>
 import moment from 'moment'
@@ -182,7 +182,10 @@ export default {
         method: 'get',
         url: this.baseUrl + `teacher/course?teacherId=${user.id}` 
       }).then(res => {
-        this.courseList = res.data.data
+        if(res.data.code == 0) {
+          this.courseList = res.data.data
+        }
+        
       })
     }
   }

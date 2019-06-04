@@ -7,14 +7,15 @@
         <label for="name">用户名</label>
         <input @focus="handleInput('name')" type="text" id="name" class="input-text" v-model="name">
         <input v-if="isUser" type="button" class="btn" value="成为老师" @click="onRegisterFunc" style="float: right;">
-        <!-- <Tag>标签一</Tag> -->
+        <Tag v-if="isUser" type ="border" color="success" style="float: right;">普通用户</Tag>
+        <Tag v-else type ="border" color="warning" style="float: right;">教师</Tag>
 			  <teacherRegister ref="showRegister"></teacherRegister>
       </li>
       <li>
         <label>性别</label>
-        <input @focus="handleInput('sex')" type="radio" id="man" value="F" class="input-radio" v-model="sex">
+        <input @focus="handleInput('sex')" type="radio" id="man" value="M" class="input-radio" v-model="sex">
         <label for="man" class="radioLabel">男</label>
-        <input @focus="handleInput('sex')" type="radio" id="woman" value="M" class="input-radio" v-model="sex">
+        <input @focus="handleInput('sex')" type="radio" id="woman" value="F" class="input-radio" v-model="sex">
         <label for="woman" class="radioLabel">女</label>
       </li>
       <li>
@@ -35,6 +36,7 @@
       <input type="button" value="保存" class="btn" @click="save();" style="margin-left:190px;">
     </li>
   </div>
+  
 </template>
 
 <script>

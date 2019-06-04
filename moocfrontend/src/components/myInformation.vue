@@ -2,7 +2,7 @@
   div(class='myInformation' style="padding-left: 200px;")
     h2 我的通知
     div(style="padding: 20px 50px;")
-      Tabs(value="comment" on-click="switchTab")
+      Tabs(value="comment")
         TabPane(label="评价通知" name="comment")
           Table(:columns="columns", :data="commentsList", size="small")
         TabPane(label="留言通知" name="message")
@@ -41,8 +41,8 @@ export default {
                     this.$router.push(`/sections_detail/${params.row.sectionId}`); // 跳到course_detail 界面 根据params.row.courseId获取所有列表和留言信息 
                   }
                 }
-              }, params.row.replyContent),
-            ]) // {/sections_detail/${params.row.sectionId}
+              }, params.row.content),
+            ]) 
           }
         },
         {

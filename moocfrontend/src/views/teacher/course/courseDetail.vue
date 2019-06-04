@@ -19,7 +19,7 @@
                 <ul class="chapter-sub" style="margin-top: 20px;">
                   <div>
                     <div v-for="(jie, index) in section.children" :key="index">
-                      <a @click="playVideo(jie)">
+                      <a>
                         <li class="chapter-sub-li">
                           <i class="icon-video">▶</i> {{jie.name}}
                         </li>
@@ -51,6 +51,7 @@
           <input type="file" @change="addVideo" ref="inputer"> 上传视频
         </div>
     </Modal>
+    <div v-if="isShowLoading" style="width: 80px; height: 30px; background: #3f51b570; border-radius: 4px; position: fixed; top: 90px; color: #ffffff; left: 50%; transform: translateX(-50%); line-height: 30px;text-align: center;" > loading... </div>
   </div> 
 </template>
 <script>
@@ -63,6 +64,7 @@ export default {
       sectionName: '',
       file: '',
       jieName: '',
+      isShowLoading: false,
     }
   },
   created() {
@@ -109,13 +111,19 @@ export default {
       formData.append('chapterName', this.jieName)
       formData.append('parentId', parentSection.sectionId)
       formData.append('video', this.file)
+      this.isShowLoading = true
       this.$http({
         method: 'post',
         url: this.baseUrl + 'teacher/course/chapter',
         data: formData 
       }).then(res => {
         if(res.data.code == 0) {
+          this.isShowLoading = false
           this.$Message.success('添加节成功')
+          this.jieName = ''
+          let inputDOM = this.$refs.inputer;
+          // 通过DOM取文件数据
+          this.file = ''
           this.getSectionList()
         }
       })

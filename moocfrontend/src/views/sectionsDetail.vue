@@ -172,6 +172,7 @@ export default {
       }).then(res => {
         if(res.data.code == 0) {
           this.$Message.success(res.data.msg)
+          this.comment = ''
           this.getAllMessage() // 获取所有留言
           this.isShowModal = false
         }else {
@@ -209,6 +210,7 @@ export default {
       }).then(res => {
         if(res.data.code == 0) {
           this.$Message.success(res.data.msg)
+          this.replyContent = ''
           this.getAllMessage()
           this.isShowModal = false
           this.comment = ''
@@ -241,9 +243,10 @@ export default {
     },
     // 根据sectionId获取到章节详情内容
     getSectionDetail() {
+      let video = JSON.parse(sessionStorage.getItem('video_detail'))
       this.$http({
         method: 'get',
-        url: this.baseUrl + `course-section/info?courseSectionId=${this.$route.params.sectionId}`
+        url: this.baseUrl + `course-section/info?courseSectionId=${video.sectionId}`
       }).then(res => {
         if(res.data.code == 0) {
          this.video = res.data.data
