@@ -48,7 +48,7 @@
         <span>章节名称</span>
         <input type="text" v-model="jieName" style="margin-left: 10px;height: 30px;width: 400px;">
         <div style="margin-top: 20px;">
-          <input type="file" @change="addVideo" ref="inputer"> 上传视频
+          <input type="file" @change="addVideo" ref="inputer" id="fileupload"> 上传视频
         </div>
     </Modal>
     <div v-if="isShowLoading" style="width: 80px; height: 30px; background: #3f51b570; border-radius: 4px; position: fixed; top: 90px; color: #ffffff; left: 50%; transform: translateX(-50%); line-height: 30px;text-align: center;" > loading... </div>
@@ -91,7 +91,9 @@ export default {
       }).then( res => {
         if(res.data.code == 0) {
           this.$Message.success('添加章成功')
+          this.sectionName = ''
           this.getSectionList()
+          
         }
       })
     },
@@ -121,15 +123,21 @@ export default {
           this.isShowLoading = false
           this.$Message.success('添加节成功')
           this.jieName = ''
-          let inputDOM = this.$refs.inputer;
-          // 通过DOM取文件数据
-          this.file = ''
+          // let inputDOM = this.$refs.inputer;
+          // // 通过DOM取文件数据
+          // this.file = ''
+          var obj = document.getElementById('fileupload') ; 
+          obj.outerHTML=obj.outerHTML; 
           this.getSectionList()
         }
       })
     },
     sectionCancel() {
       this.isShowSection = false
+      var obj = document.getElementById('fileupload') ; 
+      obj.outerHTML=obj.outerHTML;
+      this.jieName = ''
+      this.sectionName = ''
     },
     // 根据课程courseId获取到章节列表
     getSectionList() {

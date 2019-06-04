@@ -20,7 +20,7 @@
           <li class="clearfix" style="margin-top: 20px;margin-left:100px;">
             <input type="button" value="登录" class="btn" style="margin-right:20px;" @click="doSubmit">
             <input type="button" value="注册" class="btn"  @click="$router.push('register')">
-            <a href="javascript:void(0)" @click="$router.push('/teacher_login')" class="link">我是老师</a>
+            <a href="javascript:void(0)" @click="$router.push('/teacher_login')" class="link">后台管理入口</a>
           </li>
         </form>
       </div>

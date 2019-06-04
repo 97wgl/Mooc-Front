@@ -8,15 +8,15 @@
 
           <div class="course-meta" style="display: flex; height: 50px;">
             <!-- 未登录 -->
-            <div v-if="!isLogina || isStudy.length == 0" style="padding-top: 25px;"> 
+            <div v-if="!isLogina || !studyed" style="padding-top: 25px;"> 
               <a href="javascript:void(0)" class="learn-btn" @click="playVideo(sectionList[0])">开始学习</a>
             </div>
             <!-- 上次学到 -->
-            <div v-if="isLogina && isStudy.length" style="display: flex;">
-              <a style="margin-top: 20px;" href="javascript:void(0)" class="learn-btn" @click="playVideo(isStudy[0]);">继续学习</a>
+            <div v-if="isLogina && studyed" style="display: flex;">
+              <a style="margin-top: 20px;" href="javascript:void(0)" class="learn-btn" @click="playVideo(studyed);">继续学习</a>
               <div class="static-item">
                 <div class="meta">上次学到</div>
-                <div class="meta-value"> {{isStudy[0].sectionName}} </div>
+                <div class="meta-value"> {{studyed['sectionName']}} </div>
               </div>
             </div>
 
@@ -222,6 +222,17 @@ export default {
       isLogina: false,
     }
   },
+  computed: {
+    studyed() {
+      let data = ''
+      this.isStudy.forEach(item => {
+        if(item.courseId == this.$route.params.id) {
+          data = item
+        }
+      })
+      return data
+    }
+  },
   created() {
     this.course.id = this.$route.params.id
     this.getCourseDetail() // 课程详情页
@@ -283,6 +294,7 @@ export default {
         method: 'get',
         url: this.baseUrl + `course-section/list?courseId=${this.$route.params.id}`
       }).then(res => {
+        if(res.data.code == 0 && res.data.data.length)
         this.sectionList = this.toTreeData(res.data.data)
       })
     },

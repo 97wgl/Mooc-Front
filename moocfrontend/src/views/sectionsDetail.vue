@@ -6,7 +6,7 @@
           <div class="course-title" style="font-size: 24px;"> {{video.name}} </div>
 
           <div class="course-video">
-            <video :src="'http://192.168.1.107:8080/'+video.videoUrl" width="100%" height="100%" controls
+            <video :src="'http://192.168.1.107:8080'+video.videoUrl" width="100%" height="100%" controls
                   preload @play="isPlay">
             </video>
 

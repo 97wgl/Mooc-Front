@@ -5,9 +5,9 @@
       <div class="course-nav-row clearfix">
         <span class="hd">分类</span>
         <ul class="course-nav">
-          <li class="course-nav-item " v-for="(item,index) in firstLevelList":key="index"
+          <li class="course-nav-item " v-for="(item,index) in firstLevelList" :key="index"
            v-bind:class="{'cur-course-nav':item.isActive}"> 
-           <a href="javascript:void(0)" @click="switchClassify(item.title,index)">{{item.title}}</a></li>
+           <a @click="switchClassify(item.title,index)">{{item.title}}</a></li>
         </ul>
       </div>
       <!-- 一级分类-end -->
@@ -16,15 +16,15 @@
       <div class="types-block clearfix" style="padding:0px;">
         <h3 style="margin-bottom: 20px;">
           <span class="types-title" style="margin-right:40px;">课程列表</span>
-          <a href="javascript:void(0)" style="display: inline-block;margin-right:20px;">
+          <a style="display: inline-block;margin-right:20px;">
             <span v-bind:class="{'color-oc':isSelectedNew}" @click="switchTag()">最新</span>
           </a>
-          <a href="javascript:void(0)" style="display: inline-block;">
+          <a style="display: inline-block;">
             <span v-bind:class="{'color-oc':!isSelectedNew}" @click="switchTag()">最热</span>
           </a>
         </h3>
         <div class="types-content clearfix" style="margin-bottom: 20px;">
-          <div v-for="(item,index) in courseList":key="index" v-bind:class="{'course-card-container':1,'course-card-last':(index+1)%5==0}">
+          <div v-for="(item,index) in courseList" @click="JumpToCourseDetail(item.courseId)" :key="index" v-bind:class="{'course-card-container':1,'course-card-last':(index+1)%5==0}">
             <div class="course-card-top brown-bg"><span>{{item.classify}}</span></div>
             <div class="course-card-content">
               <h3 class="course-card-name">{{item.name}}</h3>
@@ -46,7 +46,19 @@ export default {
   data(){
     return {
       firstLevelList: [
-        {title: '全部',isActive: 1}
+        {title: '全部',isActive: 1},
+        {title: '前端开发',isActive: 0},
+        {title: '后端开发',isActive: 0},
+        {title: '移动开发',isActive: 0},
+        {title: '算法',isActive: 0},
+        {title: '前沿技术',isActive: 0},
+        {title: '云计算',isActive: 0},
+        {title: '大数据',isActive: 0},
+        {title: '运维',isActive: 0},
+        {title: '测试',isActive: 0},
+        {title: '数据库',isActive: 0},
+        {title: 'UI设计',isActive: 0},
+        {title: '多媒体',isActive: 0},
       ],
       courseList:[],
       isSelectedNew: 1,
@@ -54,6 +66,9 @@ export default {
     }
   },
   methods: {
+    JumpToCourseDetail(courseId) {
+      this.$router.push(`/course_detail/${courseId}`)
+    },
     switchClassify(title,index){
       this.isSelectedNew = 1;
       this.firstLevelList.map((item,idx)=>{
@@ -130,9 +145,6 @@ export default {
       if(res.data && res.data.data){
         let allCourse = res.data.data.concat();
         let titleList = [...new Set(allCourse.map(item=>item.classify))];
-        titleList.map(item=>{
-          this.firstLevelList.push({'title': item,'isActive':0});
-        });
         this.courseList = allCourse.concat();
       }
     }).catch(error => {

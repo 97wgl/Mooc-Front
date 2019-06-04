@@ -128,7 +128,7 @@ export default {
           }),
       }).then(res => {
         if(res.data.code == 0){
-          this.courseList = res.data.data.concat();
+          this.courseList = res.data.data.filter(item => item.status != 3)
         }
       });
     },

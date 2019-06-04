@@ -3,8 +3,8 @@
     <div class="f-main">
       <div class="clearfix">
         <swiper :options="swiperOption" class="swiper-wrap"  ref="mySwiper" v-if="goodCourseList.length!=0">
-          <swiper-slide v-for="(item,index) in goodCourseList" :key="index" style="cursor: pointer;">
-            <img :src="baseUrl+item.picture" alt="课程"  @click="JumpToCourseDetail(item.courseId)"/>
+          <swiper-slide v-for="(item,index) in carouselList" :key="index" style="cursor: pointer;">
+            <img :src="baseUrlTwo+item.picture" alt="课程"  @click="JumpToCourseDetail(item.courseId)"/>
           </swiper-slide>
           <!-- 小圆点 -->
           <div class="swiper-pagination" v-for="(item,index) in goodCourseList" :key="index" slot="pagination" ></div>
@@ -91,7 +91,7 @@
         <div v-for='(item,index) in recomdTeacherList' :key="index">
           <div v-bind:class="{'lecturer-card-container':1,'course-card-last':index==4}">
             <div class="lecturer-item">
-              <img :src="baseUrl+item.headImg" class="lecturer-uimg" >
+              <img src="http://111.230.240.26:8080/yourmooc/resources/images/header.jpg" class="lecturer-uimg" >
               <span class="lecturer-name">{{item.name}}</span>
               <span class="lecturer-title">{{item.orgnization}}</span>
               <span class="lecturer-p"> {{item.position}} {{item.remark}} </span>
@@ -144,6 +144,16 @@ export default {
   methods: {
     JumpToCourseDetail(courseId) {
       this.$router.push(`/course_detail/${courseId}`)
+    },
+    getGoodCourseList() {
+      this.$http({
+        method: 'get',
+        url: this.baseUrl + 'course/good'
+      }).then(res => {
+        if(res.data.code == 0) {
+          this.goodCourseList = res.data.data
+        }
+      })
     }
   },
   computed: {
@@ -160,9 +170,9 @@ export default {
       if(response.data && response.data.data){
         let courseData = response.data.data;
         if(courseData.length > 5){
-          this.goodCourseList = courseData.slice(0,5);
+          this.carouselList = courseData.slice(0,5);
         }else{
-          this.goodCourseList = courseData.concat();
+          this.carouselList = courseData.concat();
         }
       }   
     }).catch(error => {
@@ -181,6 +191,7 @@ export default {
     }).catch(error => {
       console.log(error);
     });
+    this.getGoodCourseList()
   },
   components: {
     swiper,swiperSlide
